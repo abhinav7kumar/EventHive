@@ -13,6 +13,7 @@ import { Separator } from '@/components/ui/separator';
 import { Dialog, DialogContent, DialogFooter } from '@/components/ui/dialog';
 import { TicketStub } from '@/components/ticket-stub';
 import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 
 function Confirmation() {
     const searchParams = useSearchParams();
@@ -39,7 +40,7 @@ function Confirmation() {
       quantity: 1, // This is a simplification
     };
 
-    const handleDownloadImage = async () => {
+    const handleDownloadPdf = async () => {
         const ticketElement = ticketRef.current;
         if (!ticketElement) return;
 
@@ -59,18 +60,21 @@ function Confirmation() {
 
         try {
             await waitForImages(ticketElement);
-            await new Promise(resolve => setTimeout(resolve, 500));
+            await new Promise(resolve => setTimeout(resolve, 200));
 
-            const canvas = await html2canvas(ticketElement, { scale: 4, useCORS: true });
+            const canvas = await html2canvas(ticketElement, { scale: 2, useCORS: true });
             const imgData = canvas.toDataURL('image/png');
-            const link = document.createElement('a');
-            link.href = imgData;
-            link.download = `ticket-${event.title.replace(/\s/g, '-')}.png`;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+            
+            const pdf = new jsPDF({
+                orientation: 'portrait',
+                unit: 'px',
+                format: [canvas.width, canvas.height]
+            });
+        
+            pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+            pdf.save(`ticket-${event.title.replace(/\s/g, '-')}.pdf`);
         } catch (error) {
-            console.error("Failed to download image", error);
+            console.error("Failed to download PDF", error);
         }
     };
 
@@ -131,9 +135,9 @@ function Confirmation() {
                     <TicketStub ref={ticketRef} ticket={mockTicket} />
                     <DialogFooter className="pt-4 flex-row justify-center sm:justify-center">
                         <Button variant="secondary" onClick={() => setIsTicketModalOpen(false)}>Close</Button>
-                        <Button onClick={handleDownloadImage}>
+                        <Button onClick={handleDownloadPdf}>
                             <Download className="mr-2 h-4 w-4" />
-                            Download Image
+                            Download PDF
                         </Button>
                     </DialogFooter>
                 </DialogContent>

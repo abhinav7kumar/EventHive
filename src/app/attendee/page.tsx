@@ -15,6 +15,7 @@ import { useEvents } from "@/context/EventContext";
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 import { TicketStub } from "@/components/ticket-stub";
 import Link from "next/link";
 import { SiteHeader } from "@/components/site-header";
@@ -56,11 +57,10 @@ export default function AttendeeDashboardPage() {
     setIsTicketModalOpen(true);
   }
 
-  const handleDownloadImage = async () => {
+  const handleDownloadPdf = async () => {
     const ticketElement = ticketRef.current;
     if (!ticketElement) return;
-    
-    // This function waits for all images inside an element to load
+
     const waitForImages = (element: HTMLElement) => {
         const images = Array.from(element.getElementsByTagName('img'));
         const promises = images.map(img => {
@@ -77,29 +77,29 @@ export default function AttendeeDashboardPage() {
     };
 
     try {
-        // Wait for images to load before capturing
         await waitForImages(ticketElement);
-        // Add a small extra delay just in case, for rendering quirks
-        await new Promise(resolve => setTimeout(resolve, 500));
+        await new Promise(resolve => setTimeout(resolve, 200));
 
         const canvas = await html2canvas(ticketElement, {
-            scale: 4, // Higher scale for better quality
-            useCORS: true, // Needed for external images
+            scale: 2,
+            useCORS: true, 
         });
-
-        const imgData = canvas.toDataURL('image/png');
         
-        const link = document.createElement('a');
-        link.href = imgData;
-        link.download = `ticket-${selectedTicket.title.replace(/\s/g, '-')}.png`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jsPDF({
+            orientation: 'portrait',
+            unit: 'px',
+            format: [canvas.width, canvas.height]
+        });
+        
+        pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+        pdf.save(`ticket-${selectedTicket.title.replace(/\s/g, '-')}.pdf`);
 
     } catch (error) {
-        console.error("Failed to download image", error);
+        console.error("Failed to download PDF", error);
     }
-  }
+  };
+
 
   return (
     <>
@@ -229,9 +229,9 @@ export default function AttendeeDashboardPage() {
                 <TicketStub ref={ticketRef} ticket={selectedTicket} />
                 <DialogFooter className="pt-4 flex-row justify-center sm:justify-center">
                     <Button variant="secondary" onClick={() => setIsTicketModalOpen(false)}>Close</Button>
-                    <Button onClick={handleDownloadImage}>
+                    <Button onClick={handleDownloadPdf}>
                         <Download className="mr-2 h-4 w-4" />
-                        Download Image
+                        Download PDF
                     </Button>
                 </DialogFooter>
             </DialogContent>
