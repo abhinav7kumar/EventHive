@@ -22,9 +22,9 @@ const engagementData = [
 ];
 
 const engagementBreakdownData = [
-  { name: 'Impressions', value: 150234, fill: 'hsl(var(--chart-1))' },
-  { name: 'Clicks', value: 3755, fill: 'hsl(var(--chart-2))'  },
-  { name: 'Leads', value: 128, fill: 'hsl(var(--chart-3))'  },
+  { name: 'Impressions', value: 15000, fill: 'hsl(var(--chart-1))' },
+  { name: 'Clicks', value: 8500, fill: 'hsl(var(--chart-2))'  },
+  { name: 'Leads', value: 4500, fill: 'hsl(var(--chart-3))'  },
 ];
 
 
@@ -159,10 +159,13 @@ export default function SponsorshipAnalyticsPage() {
                                 <ChartContainer config={chartConfig} className="h-[250px] w-full">
                                     <PieChart>
                                         <Tooltip content={<ChartTooltipContent hideLabel nameKey="name" />} />
-                                        <Pie data={engagementBreakdownData} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={30} outerRadius={80}>
+                                        <Pie data={engagementBreakdownData} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={40} outerRadius={100} strokeWidth={2}>
+                                            {engagementBreakdownData.map((entry, index) => (
+                                                <Cell key={`cell-${index}`} fill={entry.fill} />
+                                            ))}
                                             <LabelList
                                                 dataKey="name"
-                                                className="fill-background"
+                                                className="fill-primary-foreground font-semibold"
                                                 stroke="none"
                                                 fontSize={12}
                                                 formatter={(value: keyof typeof chartConfig) =>
