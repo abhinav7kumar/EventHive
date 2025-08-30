@@ -1,0 +1,170 @@
+'use client';
+
+import { useState, useEffect, useRef } from 'react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { useToast } from '@/hooks/use-toast';
+import { Camera, QrCode, Ticket, UserCheck, UserX, Frown } from 'lucide-react';
+import Link from 'next/link';
+
+type ScanStatus = 'waiting' | 'success' | 'failure' | 'duplicate';
+
+const MOCK_TICKET_DB: Record<string, { name: string; status: 'valid' | 'checked-in' }> = {
+  '12345-ABCDE': { name: 'John Doe', status: 'valid' },
+  '67890-FGHIJ': { name: 'Jane Smith', status: 'checked-in' },
+  '11223-KLMNO': { name: 'Peter Jones', status: 'valid' },
+};
+
+
+export default function CheckInScannerPage() {
+  const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
+  const [scanStatus, setScanStatus] = useState<ScanStatus>('waiting');
+  const [scannedData, setScannedData] = useState<{name: string, status: string} | null>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const { toast } = useToast();
+
+  useEffect(() => {
+    const getCameraPermission = async () => {
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        console.error('Camera API not supported');
+        setHasCameraPermission(false);
+        toast({
+          variant: 'destructive',
+          title: 'Unsupported Browser',
+          description: 'Your browser does not support camera access for scanning.',
+        });
+        return;
+      }
+
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        setHasCameraPermission(true);
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+        }
+      } catch (error) {
+        console.error('Error accessing camera:', error);
+        setHasCameraPermission(false);
+        toast({
+          variant: 'destructive',
+          title: 'Camera Access Denied',
+          description: 'Please enable camera permissions in your browser settings.',
+        });
+      }
+    };
+
+    getCameraPermission();
+
+    return () => {
+      // Cleanup: stop the camera stream when the component unmounts
+      if (videoRef.current && videoRef.current.srcObject) {
+        const stream = videoRef.current.srcObject as MediaStream;
+        stream.getTracks().forEach(track => track.stop());
+      }
+    };
+  }, [toast]);
+
+  // Simulate scanning
+  const handleMockScan = (result: ScanStatus) => {
+    setScanStatus(result);
+    if(result === 'success') {
+      setScannedData({name: 'John Doe', status: 'Checked-In'});
+    } else if (result === 'duplicate') {
+      setScannedData({name: 'Jane Smith', status: 'Already Checked-In'});
+    } else {
+       setScannedData({name: 'Unknown Ticket', status: 'Invalid'});
+    }
+
+    setTimeout(() => {
+        setScanStatus('waiting');
+        setScannedData(null);
+    }, 4000);
+  };
+
+  const StatusDisplay = () => {
+    switch (scanStatus) {
+      case 'success':
+        return (
+          <div className="text-center text-green-500 animate-fade-in">
+            <UserCheck className="mx-auto h-16 w-16 mb-2" />
+            <h3 className="text-xl font-bold">Success!</h3>
+            <p>{scannedData?.name} checked-in.</p>
+          </div>
+        );
+      case 'failure':
+        return (
+          <div className="text-center text-destructive animate-fade-in">
+            <UserX className="mx-auto h-16 w-16 mb-2" />
+            <h3 className="text-xl font-bold">Invalid Ticket</h3>
+            <p>This ticket is not valid for this event.</p>
+          </div>
+        );
+      case 'duplicate':
+          return (
+          <div className="text-center text-yellow-500 animate-fade-in">
+            <UserX className="mx-auto h-16 w-16 mb-2" />
+            <h3 className="text-xl font-bold">Already Checked In</h3>
+            <p>{scannedData?.name} has already been scanned.</p>
+          </div>
+        );
+      default:
+        return (
+          <div className="text-center text-muted-foreground">
+            <QrCode className="mx-auto h-16 w-16 mb-2" />
+            <h3 className="text-xl font-bold">Ready to Scan</h3>
+            <p>Position the ticket's QR code in front of the camera.</p>
+          </div>
+        );
+    }
+  };
+
+
+  return (
+    <div className="bg-muted/40 min-h-screen flex items-center justify-center p-4">
+      <Card className="w-full max-w-2xl">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Camera />
+            Event Check-in Scanner
+          </CardTitle>
+          <CardDescription>
+            Point the camera at an attendee's QR code to validate their ticket.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div className="aspect-video w-full bg-slate-900 rounded-lg overflow-hidden relative border">
+            <video ref={videoRef} className="w-full h-full object-cover" autoPlay muted playsInline />
+            <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
+                 <div className="w-64 h-64 border-4 border-dashed border-white/50 rounded-lg"/>
+            </div>
+            {hasCameraPermission === false && (
+               <div className="absolute inset-0 bg-black/80 flex flex-col items-center justify-center text-white p-4">
+                    <Frown className="h-12 w-12 mb-4 text-destructive"/>
+                    <h2 className="text-xl font-bold">Camera Not Available</h2>
+                    <p className="text-center">Please grant camera permission to use the scanner.</p>
+               </div>
+            )}
+          </div>
+          
+          <div className="p-6 border rounded-lg h-36 flex items-center justify-center">
+            <StatusDisplay />
+          </div>
+
+          {/* Mock buttons for simulation */}
+          <div className="flex justify-center gap-4 pt-4">
+             <Button onClick={() => handleMockScan('success')} variant="outline" disabled={scanStatus !== 'waiting'}>Simulate Success</Button>
+             <Button onClick={() => handleMockScan('failure')} variant="outline" disabled={scanStatus !== 'waiting'}>Simulate Failure</Button>
+             <Button onClick={() => handleMockScan('duplicate')} variant="outline" disabled={scanStatus !== 'waiting'}>Simulate Duplicate</Button>
+          </div>
+          
+          <div className="text-center pt-4">
+            <Link href="/organizer">
+                <Button variant="link">Back to Dashboard</Button>
+            </Link>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}

@@ -152,7 +152,9 @@ export default function OrganizerDashboardPage() {
                                 <CardDescription>Manage attendee entry at your venue.</CardDescription>
                             </CardHeader>
                             <CardContent>
-                                <Button className="w-full">Launch Check-in Scanner</Button>
+                                <Link href="/organizer/check-in">
+                                    <Button className="w-full">Launch Check-in Scanner</Button>
+                                </Link>
                             </CardContent>
                         </Card>
 
