@@ -228,7 +228,9 @@ export default function OrganizerDashboardPage() {
                                     </DialogFooter>
                                 </DialogContent>
                             </Dialog>
-                            <Button variant="outline" className="w-full justify-start">Manage Discounts</Button>
+                            <Link href="/organizer/discounts" className="w-full">
+                                <Button variant="outline" className="w-full justify-start">Manage Discounts</Button>
+                            </Link>
                             <Button variant="outline" className="w-full justify-start">Referral Rewards</Button>
                           </CardContent>
                         </Card>
@@ -261,3 +263,4 @@ export default function OrganizerDashboardPage() {
     );
 
     
+}
