@@ -166,7 +166,7 @@ export default function EventDetailPage({ params }: { params: { id: string } }) 
                     <div key={ticket.id} className="flex justify-between items-center p-3 rounded-lg border">
                         <div>
                             <p className="font-semibold">{ticket.name}</p>
-                            <p className="text-sm font-bold text-primary">${ticket.price.toFixed(2)}</p>
+                            <p className="text-sm font-bold text-primary">₹{ticket.price.toFixed(2)}</p>
                         </div>
                         <div className="flex items-center gap-2">
                             <Button variant="outline" size="icon" className="h-8 w-8"><Minus className="h-4 w-4"/></Button>
@@ -178,7 +178,7 @@ export default function EventDetailPage({ params }: { params: { id: string } }) 
                    <Separator/>
                    <div className="flex justify-between font-bold text-lg">
                     <p>Total</p>
-                    <p>${event.tickets[0].price.toFixed(2)}</p>
+                    <p>₹{event.tickets[0].price.toFixed(2)}</p>
                    </div>
                    <Link href={event.externalLink} className="w-full">
                     <Button className="w-full" size="lg">Register Now</Button>

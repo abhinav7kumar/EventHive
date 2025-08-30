@@ -18,9 +18,9 @@ const mockEvents: Event[] = [
       { time: '13:00', activity: 'Lunch at Canteen', details: 'A break for lunch will be provided at the canteen.' },
     ],
     speakers: [],
-    tickets: [{ id: 't1', name: 'General', price: 50, quantity: 2000, saleStartDate: '2024-05-01', saleEndDate: '2025-08-30' }],
+    tickets: [{ id: 't1', name: 'General', price: 0, quantity: 2000, saleStartDate: '2024-05-01', saleEndDate: '2025-08-30' }],
     published: true,
-    organizer: 'Stellar Productions',
+    organizer: 'Odoo team',
     externalLink: '#',
   },
   {
