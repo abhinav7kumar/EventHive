@@ -80,24 +80,27 @@ export default function AdminDashboardPage() {
                         <CardDescription>Approve or reject events before they go live.</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
-                        {pendingEvents.map(event => (
-                            <div key={event.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors">
-                                <div className="flex items-center gap-4">
-                                     <div className="p-3 bg-primary/10 rounded-lg">
-                                        <Ticket className="h-5 w-5 text-primary" />
-                                     </div>
-                                    <div>
-                                        <p className="font-semibold">{event.title}</p>
-                                        <p className="text-sm text-muted-foreground">{event.organizer} • <span className="font-medium text-primary/80">{event.category}</span></p>
+                        {pendingEvents.length > 0 ? (
+                            pendingEvents.map(event => (
+                                <div key={event.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors">
+                                    <div className="flex items-center gap-4">
+                                         <div className="p-3 bg-primary/10 rounded-lg">
+                                            <Ticket className="h-5 w-5 text-primary" />
+                                         </div>
+                                        <div>
+                                            <p className="font-semibold">{event.title}</p>
+                                            <p className="text-sm text-muted-foreground">{event.organizer} • <span className="font-medium text-primary/80">{event.category}</span></p>
+                                        </div>
+                                    </div>
+                                    <div className="flex gap-2">
+                                        <Button variant="ghost" size="icon" className="text-green-500 hover:text-green-600 rounded-full"><CheckCircle className="h-5 w-5"/></Button>
+                                        <Button variant="ghost" size="icon" className="text-destructive hover:text-destructive/80 rounded-full"><XCircle className="h-5 w-5"/></Button>
                                     </div>
                                 </div>
-                                <div className="flex gap-2">
-                                    <Button variant="ghost" size="icon" className="text-green-500 hover:text-green-600 rounded-full"><CheckCircle className="h-5 w-5"/></Button>
-                                    <Button variant="ghost" size="icon" className="text-destructive hover:text-destructive/80 rounded-full"><XCircle className="h-5 w-5"/></Button>
-                                </div>
-                            </div>
-                        ))}
-                         {pendingEvents.length === 0 && <p className="text-muted-foreground text-center py-4">No events pending approval.</p>}
+                            ))
+                        ) : (
+                            <p className="text-muted-foreground text-center py-4">No events pending approval.</p>
+                        )}
                     </CardContent>
                 </Card>
 
