@@ -3,6 +3,7 @@ import './globals.css';
 import { Footer } from '@/components/footer';
 import { Toaster } from '@/components/ui/toaster';
 import { EventProvider } from '@/context/EventContext';
+import { CouponProvider } from '@/context/CouponContext';
 
 export const metadata: Metadata = {
   title: 'EventSpotlight',
@@ -23,9 +24,11 @@ export default function RootLayout({
       </head>
       <body className="font-body antialiased min-h-screen flex flex-col">
         <EventProvider>
+          <CouponProvider>
             <main className="flex-1">{children}</main>
             <Footer />
             <Toaster />
+          </CouponProvider>
         </EventProvider>
       </body>
     </html>
