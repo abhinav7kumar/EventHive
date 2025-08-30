@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { Button } from "@/components/ui/button";
@@ -26,9 +25,8 @@ const bookedTickets = [
 ];
 
 const communityGroups = [
-    { eventId: '1', eventName: 'Odoo X CGC', members: 3, description: 'Connect with fellow hackathon lovers!', link: 'https://chat.whatsapp.com/GE4pWuwBLm10kRzDlDW848?mode=ems_copy_t' },
-    { eventId: '2', eventName: 'AI & The Future of Tech', members: 450, description: 'Discuss the latest in AI.' }
-]
+    { eventId: '1', eventName: 'Odoo X CGC', members: 3, description: 'Connect with fellow hackathon lovers!', link: 'https://chat.whatsapp.com/GE4pWuwBLm10kRzDlDW848?mode=ems_copy_t' }
+];
 
 const recentChats = [
     { name: 'Jane Doe', message: 'Excited for the keynote!', avatar: 'https://i.pravatar.cc/150?u=jane' },
