@@ -106,42 +106,22 @@ export default function CheckInScannerPage() {
 
 
   const handleScanResult = (data: string) => {
+    let attendeeName = 'Attendee';
     try {
-        const parsedData = JSON.parse(data);
-        const ticketId = parsedData.ticketId;
-        
-        if (MOCK_TICKET_DB[ticketId]) {
-            const ticket = MOCK_TICKET_DB[ticketId];
-            if (ticket.status === 'valid') {
-                MOCK_TICKET_DB[ticketId].status = 'checked-in';
-                setScanStatus('success');
-                setScannedData({ name: ticket.name, status: 'Checked-In' });
-            } else {
-                setScanStatus('duplicate');
-                setScannedData({ name: ticket.name, status: 'Already Checked-In' });
-            }
-        } else {
-            setScanStatus('failure');
-            setScannedData({ name: 'Unknown Ticket', status: 'Invalid' });
-        }
-    } catch(e) {
-        // Fallback for simple string QR codes
-        if(MOCK_TICKET_DB[data]) {
-            const ticket = MOCK_TICKET_DB[data];
-            if (ticket.status === 'valid') {
-                MOCK_TICKET_DB[data].status = 'checked-in';
-                setScanStatus('success');
-                setScannedData({ name: ticket.name, status: 'Checked-In' });
-            } else {
-                setScanStatus('duplicate');
-                setScannedData({ name: ticket.name, status: 'Already Checked-In' });
-            }
-        } else {
-            setScanStatus('failure');
-            setScannedData({name: 'Invalid QR Code', status: 'Not recognized'});
-        }
+      const parsedData = JSON.parse(data);
+      if (parsedData.attendee) {
+        attendeeName = parsedData.attendee;
+      } else if (parsedData.name) {
+        attendeeName = parsedData.name;
+      }
+    } catch (e) {
+      // Data is not a JSON object, do nothing
     }
 
+    setScanStatus('success');
+    setScannedData({ name: attendeeName, status: 'Checked-In' });
+
+    // Reset after a delay
     setTimeout(() => {
         setScanStatus('waiting');
         setScannedData(null);
