@@ -18,9 +18,11 @@ export default function AdminDashboardPage() {
             <p className="text-muted-foreground">Platform Governance & Compliance Center</p>
           </div>
           <div className="flex gap-2">
-              <Button variant="outline">
-                  <Megaphone className="mr-2 h-4 w-4" /> Send Platform Alert
+            <Link href="/create-event">
+              <Button>
+                  <PlusCircle className="mr-2 h-4 w-4" /> Create New Event
               </Button>
+            </Link>
           </div>
         </div>
 
