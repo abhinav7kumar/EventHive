@@ -56,7 +56,8 @@ export default function AttendeeDashboardPage() {
   const handleDownloadImage = async () => {
     const ticketElement = ticketRef.current;
     if (!ticketElement) return;
-
+    
+    // This function waits for all images inside an element to load
     const waitForImages = (element: HTMLElement) => {
         const images = Array.from(element.getElementsByTagName('img'));
         const promises = images.map(img => {
@@ -73,12 +74,14 @@ export default function AttendeeDashboardPage() {
     };
 
     try {
+        // Wait for images to load before capturing
         await waitForImages(ticketElement);
+        // Add a small extra delay just in case, for rendering quirks
         await new Promise(resolve => setTimeout(resolve, 500));
 
         const canvas = await html2canvas(ticketElement, {
-            scale: 4, 
-            useCORS: true, 
+            scale: 4, // Higher scale for better quality
+            useCORS: true, // Needed for external images
         });
 
         const imgData = canvas.toDataURL('image/png');
