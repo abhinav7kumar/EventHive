@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Handshake, Store, BarChart } from "lucide-react";
+import Link from "next/link";
 
 export default function VendorDashboardPage() {
   const sponsoredEvents = [
@@ -27,7 +28,9 @@ export default function VendorDashboardPage() {
                             <h3 className="font-semibold">{event.title}</h3>
                             <Badge variant={event.status === 'Active' ? 'default' : 'secondary'}>{event.status}</Badge>
                         </div>
-                        <Button variant="outline" size="sm">Manage</Button>
+                        <Link href={`/vendor/sponsorship/${event.id}`}>
+                           <Button variant="outline" size="sm">Manage</Button>
+                        </Link>
                     </div>
                 ))}
             </CardContent>

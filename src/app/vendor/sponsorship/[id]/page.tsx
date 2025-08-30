@@ -1,0 +1,161 @@
+
+'use client';
+
+import { useParams, notFound, useRouter } from 'next/navigation';
+import { getEventById } from '@/lib/mock-data';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { ArrowLeft, BarChart2, Eye, MousePointerClick, Target, Image as ImageIcon } from 'lucide-react';
+import Link from 'next/link';
+import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts"
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
+import Image from 'next/image';
+
+const engagementData = [
+  { date: '2024-08-24', engagement: 120 },
+  { date: '2024-08-25', engagement: 150 },
+  { date: '2024-08-26', engagement: 130 },
+  { date: '2024-08-27', engagement: 220 },
+  { date: '2024-08-28', engagement: 180 },
+  { date: '2024-08-29', engagement: 280 },
+  { date: '2024-08-30', engagement: 250 },
+];
+
+const chartConfig = {
+  engagement: {
+    label: "Engagement",
+    color: "hsl(var(--primary))",
+  },
+} satisfies import("@/components/ui/chart").ChartConfig
+
+export default function SponsorshipAnalyticsPage() {
+    const params = useParams();
+    const router = useRouter();
+    const eventId = params.id as string;
+    const event = getEventById(eventId);
+
+    if (!event) {
+        notFound();
+    }
+    
+    return (
+        <div className="bg-muted/40 min-h-screen">
+            <div className="container mx-auto px-4 py-12">
+                 <div className="mb-8">
+                    <Button variant="ghost" onClick={() => router.back()}>
+                        <ArrowLeft className="mr-2 h-4 w-4"/>
+                        Back to Vendor Dashboard
+                    </Button>
+                </div>
+
+                <div className="flex justify-between items-start mb-8">
+                    <div>
+                        <h1 className="text-3xl font-bold">Sponsorship Analytics</h1>
+                        <p className="text-muted-foreground">Performance for your sponsorship of: <span className="font-semibold text-primary">{event.title}</span></p>
+                    </div>
+                </div>
+
+                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                    <Card>
+                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                            <CardTitle className="text-sm font-medium">Total Impressions</CardTitle>
+                            <Eye className="h-4 w-4 text-muted-foreground" />
+                        </CardHeader>
+                        <CardContent>
+                            <div className="text-2xl font-bold">150,234</div>
+                             <p className="text-xs text-muted-foreground">Times your brand was seen</p>
+                        </CardContent>
+                    </Card>
+                     <Card>
+                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                            <CardTitle className="text-sm font-medium">Click-Through Rate (CTR)</CardTitle>
+                            <MousePointerClick className="h-4 w-4 text-muted-foreground" />
+                        </CardHeader>
+                        <CardContent>
+                            <div className="text-2xl font-bold">2.5%</div>
+                            <p className="text-xs text-muted-foreground">From event page to your site</p>
+                        </CardContent>
+                    </Card>
+                     <Card>
+                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                            <CardTitle className="text-sm font-medium">Leads Generated</CardTitle>
+                            <Target className="h-4 w-4 text-muted-foreground" />
+                        </CardHeader>
+                        <CardContent>
+                            <div className="text-2xl font-bold">+128</div>
+                            <p className="text-xs text-muted-foreground">Sign-ups from referral code</p>
+                        </CardContent>
+                    </Card>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div className="lg:col-span-2">
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>
+                                  <span className="flex items-center gap-2">
+                                      <BarChart2 /> Engagement Over Time
+                                  </span>
+                                </CardTitle>
+                                <CardDescription>
+                                    Track views and clicks related to your sponsorship.
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <ChartContainer config={chartConfig} className="h-[350px] w-full">
+                                   <BarChart accessibilityLayer data={engagementData}>
+                                       <XAxis
+                                        dataKey="date"
+                                        tickLine={false}
+                                        axisLine={false}
+                                        tickMargin={8}
+                                        tickFormatter={(value) => new Date(value).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                                       />
+                                        <YAxis 
+                                            tickLine={false}
+                                            axisLine={false}
+                                            tickMargin={8}
+                                        />
+                                       <ChartTooltip
+                                        cursor={false}
+                                        content={<ChartTooltipContent indicator="dot" />}
+                                       />
+                                        <Bar dataKey="engagement" fill="var(--color-engagement)" radius={4} />
+                                   </BarChart>
+                                </ChartContainer>
+                            </CardContent>
+                        </Card>
+                    </div>
+
+                    <div className="space-y-8">
+                        <Card>
+                            <CardHeader>
+                                <CardTitle className="flex items-center gap-2">
+                                    <ImageIcon /> Creative Assets
+                                </CardTitle>
+                                <CardDescription>Your branding materials for this event.</CardDescription>
+                            </CardHeader>
+                            <CardContent className="space-y-4">
+                                <div className="border rounded-lg p-2 flex items-center gap-4">
+                                    <Image src="https://placehold.co/100x50" alt="Company Logo" width={100} height={50} className="rounded" />
+                                    <div>
+                                        <p className="font-semibold">Company Logo</p>
+                                        <p className="text-xs text-muted-foreground">PNG - 256KB</p>
+                                    </div>
+                                </div>
+                                <div className="border rounded-lg p-2 flex items-center gap-4">
+                                    <Image src="https://placehold.co/100x50" alt="Promotional Banner" width={100} height={50} className="rounded object-cover" />
+                                    <div>
+                                        <p className="font-semibold">Promo Banner</p>
+                                        <p className="text-xs text-muted-foreground">JPG - 1.2MB</p>
+                                    </div>
+                                </div>
+                                <Button variant="outline" className="w-full">Upload New Asset</Button>
+                            </CardContent>
+                        </Card>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
