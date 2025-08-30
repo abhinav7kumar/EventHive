@@ -4,7 +4,7 @@
 
 import { useEffect, useState } from 'react';
 import { getEventById } from '@/lib/mock-data';
-import { notFound } from 'next/navigation';
+import { notFound, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { Calendar, MapPin, User, Tag, Ticket, Plus, Minus, Share2, Link as LinkIcon, Mail, Phone, Globe, Award, Star, ExternalLink, Hash, CalendarPlus, HelpCircle, Building, Users } from 'lucide-react';
 import { format } from 'date-fns';
@@ -25,12 +25,18 @@ import { SiteHeader } from '@/components/site-header';
 
 export default function EventDetailPage({ params }: { params: { id: string } }) {
   const event = getEventById(params.id);
+  const router = useRouter();
   const [ticketQuantities, setTicketQuantities] = useState<Record<string, number>>({});
   const [formattedDate, setFormattedDate] = useState('');
   const { toast } = useToast();
 
   useEffect(() => {
     if (event) {
+      const initialQuantities: Record<string, number> = {};
+      event.tickets.forEach(ticket => {
+        initialQuantities[ticket.id] = 1;
+      });
+      setTicketQuantities(initialQuantities);
       setFormattedDate(format(new Date(event.date), 'PPPP p'));
     }
   }, [event]);
@@ -48,10 +54,29 @@ export default function EventDetailPage({ params }: { params: { id: string } }) 
   };
   
   const calculateTotal = () => {
+    if (!event) return 0;
     return event.tickets.reduce((total, ticket) => {
-      const quantity = ticketQuantities[ticket.id] || 1;
+      const quantity = ticketQuantities[ticket.id] || 0;
       return total + (ticket.price * quantity);
     }, 0);
+  };
+  
+  const handleRegisterNow = () => {
+    const selectedTickets = Object.entries(ticketQuantities)
+      .filter(([, quantity]) => quantity > 0)
+      .map(([ticketId, quantity]) => `${ticketId}:${quantity}`)
+      .join(',');
+
+    if (!selectedTickets) {
+      toast({
+        title: "No Tickets Selected",
+        description: "Please select at least one ticket to register.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    router.push(`/checkout?eventId=${event.id}&tickets=${selectedTickets}`);
   };
 
   const handleShare = () => {
@@ -234,9 +259,7 @@ export default function EventDetailPage({ params }: { params: { id: string } }) 
                     <p>Total</p>
                     <p>₹{calculateTotal().toFixed(2)}</p>
                    </div>
-                   <Link href={event.externalLink} className="w-full">
-                    <Button className="w-full" size="lg">Register Now</Button>
-                   </Link>
+                    <Button className="w-full" size="lg" onClick={handleRegisterNow}>Register Now</Button>
                 </CardContent>
             </Card>
 
