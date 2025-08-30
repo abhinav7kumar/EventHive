@@ -53,10 +53,36 @@ export default function AttendeeDashboardPage() {
     setIsTicketModalOpen(true);
   }
 
-  const handleDownloadPdf = () => {
-    if (!ticketRef.current) return;
+  const handleDownloadPdf = async () => {
+    const ticketElement = ticketRef.current;
+    if (!ticketElement) return;
 
-    html2canvas(ticketRef.current, { scale: 4, useCORS: true }).then((canvas) => {
+    // This function waits for all images inside an element to load
+    const waitForImages = (element: HTMLElement) => {
+        const images = Array.from(element.getElementsByTagName('img'));
+        const promises = images.map(img => {
+            return new Promise((resolve, reject) => {
+                if (img.complete) {
+                    resolve(true);
+                } else {
+                    img.onload = () => resolve(true);
+                    img.onerror = reject;
+                }
+            });
+        });
+        return Promise.all(promises);
+    };
+
+    try {
+        // Wait for images to load before creating the canvas
+        await waitForImages(ticketElement);
+
+        const canvas = await html2canvas(ticketElement, {
+            scale: 4,
+            useCORS: true, 
+            allowTaint: true, 
+        });
+
         const imgData = canvas.toDataURL('image/png');
         const pdf = new jsPDF({
             orientation: 'portrait',
@@ -65,7 +91,10 @@ export default function AttendeeDashboardPage() {
         });
         pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
         pdf.save(`ticket-${selectedTicket.title.replace(/\s/g, '-')}.pdf`);
-    });
+
+    } catch (error) {
+        console.error("Failed to download PDF", error);
+    }
   }
 
   return (
