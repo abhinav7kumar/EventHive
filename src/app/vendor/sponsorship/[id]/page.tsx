@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, BarChart2, Eye, MousePointerClick, Target, Image as ImageIcon, TrendingUp, PieChart as PieChartIcon } from 'lucide-react';
 import Link from 'next/link';
-import { Line, LineChart, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis, Legend, Cell } from "recharts"
+import { Line, LineChart, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis, Legend, Cell, LabelList } from "recharts"
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 import Image from 'next/image';
 
@@ -32,6 +32,18 @@ const chartConfig = {
   engagement: {
     label: "Engagement",
     color: "hsl(var(--primary))",
+  },
+  impressions: {
+    label: "Impressions",
+    color: "hsl(var(--chart-1))",
+  },
+  clicks: {
+    label: "Clicks",
+    color: "hsl(var(--chart-2))",
+  },
+  leads: {
+    label: "Leads",
+    color: "hsl(var(--chart-3))",
   },
 } satisfies import("@/components/ui/chart").ChartConfig
 
@@ -146,13 +158,18 @@ export default function SponsorshipAnalyticsPage() {
                              <CardContent className="flex items-center justify-center">
                                 <ChartContainer config={chartConfig} className="h-[250px] w-full">
                                     <PieChart>
-                                        <Tooltip content={<ChartTooltipContent hideLabel />} />
-                                        <Pie data={engagementBreakdownData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} label>
-                                            {engagementBreakdownData.map((entry, index) => (
-                                                <Cell key={`cell-${index}`} fill={entry.fill} />
-                                            ))}
+                                        <Tooltip content={<ChartTooltipContent hideLabel nameKey="name" />} />
+                                        <Pie data={engagementBreakdownData} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={30} outerRadius={80}>
+                                            <LabelList
+                                                dataKey="name"
+                                                className="fill-background"
+                                                stroke="none"
+                                                fontSize={12}
+                                                formatter={(value: keyof typeof chartConfig) =>
+                                                   chartConfig[value]?.label
+                                                }
+                                            />
                                         </Pie>
-                                        <Legend />
                                     </PieChart>
                                 </ChartContainer>
                             </CardContent>
