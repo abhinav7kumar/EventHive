@@ -20,8 +20,7 @@ import Link from "next/link";
 import { SiteHeader } from "@/components/site-header";
 
 const bookedTickets = [
-    { id: '1', title: 'Odoo X CGC Mohali Hackathon 2025', date: 'Aug 30, 2025', location: 'Mohali, Punjab', quantity: 4 },
-    { id: '5', title: 'Modern Art Showcase', date: 'Aug 1, 2024', location: 'The Grand Gallery', quantity: 1 }
+    { id: '1', title: 'Odoo X CGC Mohali Hackathon 2025', date: 'Aug 30, 2025', location: 'Mohali, Punjab', quantity: 4 }
 ];
 
 const communityGroups = [
