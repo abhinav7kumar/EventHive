@@ -28,11 +28,6 @@ const communityGroups = [
     { eventId: '1', eventName: 'Odoo X CGC', members: 3, description: 'Connect with fellow hackathon lovers!', link: 'https://chat.whatsapp.com/GE4pWuwBLm10kRzDlDW848?mode=ems_copy_t' }
 ];
 
-const recentChats = [
-    { name: 'Jane Doe', message: 'Excited for the keynote!', avatar: 'https://i.pravatar.cc/150?u=jane' },
-    { name: 'John Smith', message: 'See you at the workshop.', avatar: 'https://i.pravatar.cc/150?u=john' }
-]
-
 export default function AttendeeDashboardPage() {
   const { newEvents } = useEvents();
   const [aiRecommendation, setAiRecommendation] = useState('');
@@ -157,61 +152,34 @@ export default function AttendeeDashboardPage() {
               </Card>
           </TabsContent>
           <TabsContent value="community">
-              <div className="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-8">
-                  <div className="lg:col-span-2">
-                      <Card>
-                          <CardHeader>
-                              <CardTitle>Event Groups</CardTitle>
-                              <CardDescription>Join discussions for events you're attending.</CardDescription>
-                          </CardHeader>
-                          <CardContent className="space-y-4">
-                              {communityGroups.map(group => (
-                                  <div key={group.eventId} className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50">
-                                      <div>
-                                          <h3 className="font-semibold">{group.eventName}</h3>
-                                          <p className="text-sm text-muted-foreground">{group.description}</p>
-                                          <div className="flex items-center text-sm text-muted-foreground mt-1">
-                                              <Users className="h-4 w-4 mr-1"/>
-                                              {group.members} members
-                                          </div>
+              <div className="mt-6">
+                  <Card>
+                      <CardHeader>
+                          <CardTitle>Event Groups</CardTitle>
+                          <CardDescription>Join discussions for events you're attending.</CardDescription>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                          {communityGroups.map(group => (
+                              <div key={group.eventId} className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50">
+                                  <div>
+                                      <h3 className="font-semibold">{group.eventName}</h3>
+                                      <p className="text-sm text-muted-foreground">{group.description}</p>
+                                      <div className="flex items-center text-sm text-muted-foreground mt-1">
+                                          <Users className="h-4 w-4 mr-1"/>
+                                          {group.members} members
                                       </div>
-                                      {group.link ? (
-                                        <Link href={group.link} target="_blank" rel="noopener noreferrer">
-                                            <Button>Join Group</Button>
-                                        </Link>
-                                      ) : (
+                                  </div>
+                                  {group.link ? (
+                                    <Link href={group.link} target="_blank" rel="noopener noreferrer">
                                         <Button>Join Group</Button>
-                                      )}
-                                  </div>
-                              ))}
-                          </CardContent>
-                      </Card>
-                  </div>
-                  <div>
-                      <Card>
-                          <CardHeader>
-                              <CardTitle>Connections</CardTitle>
-                              <CardDescription>Chat with other attendees.</CardDescription>
-                          </CardHeader>
-                          <CardContent className="space-y-4">
-                              {recentChats.map(chat => (
-                                  <div key={chat.name} className="flex items-center gap-4 p-2 rounded-lg hover:bg-muted/50">
-                                      <Avatar>
-                                          <AvatarImage src={chat.avatar} />
-                                          <AvatarFallback>{chat.name.charAt(0)}</AvatarFallback>
-                                      </Avatar>
-                                      <div>
-                                          <p className="font-semibold">{chat.name}</p>
-                                          <p className="text-sm text-muted-foreground truncate">{chat.message}</p>
-                                      </div>
-                                  </div>
-                              ))}
-                              <Button variant="outline" className="w-full">
-                                  <MessageSquare className="mr-2"/> View All Chats
-                              </Button>
-                          </CardContent>
-                      </Card>
-                  </div>
+                                    </Link>
+                                  ) : (
+                                    <Button>Join Group</Button>
+                                  )}
+                              </div>
+                          ))}
+                      </CardContent>
+                  </Card>
               </div>
           </TabsContent>
           <TabsContent value="history">
