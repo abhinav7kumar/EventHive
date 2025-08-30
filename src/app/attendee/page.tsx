@@ -4,14 +4,17 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
-import { Ticket, Sparkles, MessageSquare, Users, UserPlus, QrCode, X } from "lucide-react";
+import { Ticket, Sparkles, MessageSquare, Users, UserPlus, QrCode, X, Download } from "lucide-react";
 import { getEvents } from "@/lib/mock-data";
 import { getAiRecommendation } from "../actions/ai";
 import { EventCard } from "@/components/event-card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useEvents } from "@/context/EventContext";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
+import { TicketStub } from "@/components/ticket-stub";
 
 const bookedTickets = [
     { id: '1', title: 'Stellar Sound Fest', date: 'Aug 15, 2024', location: 'Greenfield Valley, CA', quantity: 2 },
@@ -34,6 +37,8 @@ export default function AttendeeDashboardPage() {
   const [isTicketModalOpen, setIsTicketModalOpen] = useState(false);
   const [selectedTicket, setSelectedTicket] = useState<any>(null);
   const recommendedEvents = getEvents().slice(3,5);
+  const ticketRef = useRef<HTMLDivElement>(null);
+
 
   useEffect(() => {
     async function fetchRecommendation() {
@@ -46,6 +51,21 @@ export default function AttendeeDashboardPage() {
   const handleViewTicket = (ticket: any) => {
     setSelectedTicket(ticket);
     setIsTicketModalOpen(true);
+  }
+
+  const handleDownloadPdf = () => {
+    if (!ticketRef.current) return;
+
+    html2canvas(ticketRef.current, { scale: 2 }).then((canvas) => {
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jsPDF({
+            orientation: 'portrait',
+            unit: 'px',
+            format: [canvas.width, canvas.height]
+        });
+        pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+        pdf.save(`ticket-${selectedTicket.title.replace(/\s/g, '-')}.pdf`);
+    });
   }
 
   return (
@@ -76,7 +96,6 @@ export default function AttendeeDashboardPage() {
                       </CardContent>
                       <CardFooter className="flex gap-2">
                           <Button className="w-full" onClick={() => handleViewTicket(ticket)}>View Ticket</Button>
-                          <Button variant="outline" className="w-full">Download</Button>
                       </CardFooter>
                   </Card>
               ))}
@@ -164,29 +183,14 @@ export default function AttendeeDashboardPage() {
 
       {selectedTicket && (
         <Dialog open={isTicketModalOpen} onOpenChange={setIsTicketModalOpen}>
-            <DialogContent className="sm:max-w-[425px]">
-                <DialogHeader>
-                    <DialogTitle>{selectedTicket.title}</DialogTitle>
-                    <DialogDescription>Present this QR code at the event entrance.</DialogDescription>
-                </DialogHeader>
-                <div className="flex flex-col items-center justify-center p-4 space-y-4">
-                    <Image 
-                        src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=ticket-${selectedTicket.id}`}
-                        alt="Ticket QR Code"
-                        width={200}
-                        height={200}
-                        className="rounded-lg border p-2"
-                        data-ai-hint="qr code"
-                    />
-                    <div className="text-center">
-                        <p className="font-bold text-lg">Attendee: John Doe</p>
-                        <p className="text-muted-foreground">{selectedTicket.date ? new Date(selectedTicket.date).toLocaleDateString() : 'Date not set'}</p>
-                        <p className="text-muted-foreground">{selectedTicket.location}</p>
-                        <p className="font-semibold text-primary mt-2">x{selectedTicket.quantity || 1} Ticket(s)</p>
-                    </div>
-                </div>
-                <DialogFooter>
-                  <Button variant="secondary" onClick={() => setIsTicketModalOpen(false)}>Close</Button>
+            <DialogContent className="sm:max-w-md bg-transparent shadow-none border-none">
+                <TicketStub ref={ticketRef} ticket={selectedTicket} />
+                <DialogFooter className="pt-4 flex-row justify-center sm:justify-center">
+                    <Button variant="secondary" onClick={() => setIsTicketModalOpen(false)}>Close</Button>
+                    <Button onClick={handleDownloadPdf}>
+                        <Download className="mr-2 h-4 w-4" />
+                        Download PDF
+                    </Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>
