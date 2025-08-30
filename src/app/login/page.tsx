@@ -6,12 +6,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Ticket, User, Shield, Briefcase, LayoutDashboard } from "lucide-react";
 import Link from "next/link";
 
-function LoginForm({ role }: { role: string }) {
+function LoginForm({ role, email, password }: { role: string, email?: string, password?: string }) {
     return (
         <form className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor={`${role}-email`}>Email</Label>
-              <Input id={`${role}-email`} type="email" placeholder="user@example.com" required />
+              <Input id={`${role}-email`} type="email" placeholder="user@example.com" required defaultValue={email} />
             </div>
             <div className="space-y-2">
                 <div className="flex items-center justify-between">
@@ -20,7 +20,7 @@ function LoginForm({ role }: { role: string }) {
                         Forgot password?
                     </Link>
                 </div>
-              <Input id={`${role}-password`} type="password" required />
+              <Input id={`${role}-password`} type="password" required defaultValue={password} />
             </div>
             <Button type="submit" className="w-full">
               Login as {role}
@@ -49,16 +49,16 @@ export default function LoginPage() {
                     <TabsTrigger value="vendor"><LayoutDashboard className="mr-2"/>Vendor</TabsTrigger>
                 </TabsList>
                 <TabsContent value="attendee">
-                    <LoginForm role="Attendee" />
+                    <LoginForm role="Attendee" email="attendee@example.com" password="password123"/>
                 </TabsContent>
                 <TabsContent value="organizer">
-                    <LoginForm role="Organizer" />
+                    <LoginForm role="Organizer" email="organizer@example.com" password="password123"/>
                 </TabsContent>
                 <TabsContent value="admin">
-                    <LoginForm role="Admin" />
+                    <LoginForm role="Admin" email="admin@example.com" password="password123"/>
                 </TabsContent>
                 <TabsContent value="vendor">
-                    <LoginForm role="Vendor" />
+                    <LoginForm role="Vendor" email="vendor@example.com" password="password123"/>
                 </TabsContent>
             </Tabs>
            <div className="mt-4 text-center text-sm">
