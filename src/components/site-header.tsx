@@ -25,7 +25,6 @@ import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 
 const navLinks = [
   { href: '/events', label: 'Events' },
-  { href: '/create-event', label: 'Create Event' },
 ];
 
 // Mock user state
@@ -124,12 +123,6 @@ export function SiteHeader() {
                     <DropdownMenuItem>
                       <LayoutDashboard className="mr-2 h-4 w-4" />
                       <span>Vendor Dashboard</span>
-                    </DropdownMenuItem>
-                  </Link>
-                  <Link href="/create-event">
-                    <DropdownMenuItem>
-                      <PlusCircle className="mr-2 h-4 w-4" />
-                      <span>Create Event</span>
                     </DropdownMenuItem>
                   </Link>
                 </DropdownMenuGroup>
