@@ -11,7 +11,12 @@ const mockEvents: Event[] = [
     location: 'CGC University, Mohali',
     category: 'Music',
     isFeatured: true,
-    venue: { name: 'CGC University, Mohali', address: 'CGC University, Mohali' },
+    venue: { 
+      name: 'Lab 110', 
+      address: 'State Highway 12A, Chandigarh - Sirhind Road, Mohali, 140307, Punjab, India',
+      lat: 30.647468,
+      lng: 76.532578
+    },
     schedule: [
       { time: '10:00', activity: 'Gates Open', details: 'Doors open for all ticket holders.' },
       { time: '11:00', activity: 'Coding Started', details: 'The hackathon begins! Good luck to all participants.' },

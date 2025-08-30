@@ -50,7 +50,11 @@ export default function EventDetailPage({ params }: { params: { id: string } }) 
     }, 0);
   };
 
-  const gmapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(event.venue.address)}`;
+  const mapQuery = (event.venue.lat && event.venue.lng) 
+    ? `${event.venue.lat},${event.venue.lng}`
+    : encodeURIComponent(event.venue.address);
+    
+  const gmapsUrl = `https://www.google.com/maps/search/?api=1&query=${mapQuery}`;
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -141,7 +145,7 @@ export default function EventDetailPage({ params }: { params: { id: string } }) 
                         style={{ border: 0 }}
                         loading="lazy"
                         allowFullScreen
-                        src={`https://www.google.com/maps/embed/v1/place?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&q=${encodeURIComponent(event.venue.address)}`}>
+                        src={`https://www.google.com/maps/embed/v1/place?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&q=${mapQuery}`}>
                     </iframe>
                 </div>
                  <a href={gmapsUrl} target="_blank" rel="noopener noreferrer" className="mt-4">

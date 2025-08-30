@@ -16,6 +16,8 @@ export type Event = {
   venue: {
     name: string;
     address: string;
+    lat?: number;
+    lng?: number;
   };
   tickets: TicketType[];
   published: boolean;
