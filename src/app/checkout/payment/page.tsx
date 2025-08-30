@@ -81,11 +81,9 @@ function PaymentQRCode() {
   const processingFee = subtotal * 0.05;
   const total = subtotal + processingFee;
   
-  // !! IMPORTANT FOR LOCAL TESTING !!
-  // Replace "YOUR_COMPUTER_IP_ADDRESS" with your actual local IP address.
+  // Use the provided local IP address for testing.
   // Your computer and phone must be on the same Wi-Fi network.
-  // The port should match the one your Next.js app is running on (e.g., 9002).
-  const localIpAddress = "YOUR_COMPUTER_IP_ADDRESS"; 
+  const localIpAddress = "10.110.1.44"; 
   const port = "9002";
   const mobilePaymentUrl = `http://${localIpAddress}:${port}/checkout/pay-mobile?transactionId=${transactionId}&eventId=${eventId}&total=${total.toFixed(2)}`;
   const encodedQrData = encodeURIComponent(mobilePaymentUrl);
@@ -119,13 +117,6 @@ function PaymentQRCode() {
                 <Loader2 className="h-5 w-5 animate-spin" />
                 <p>Waiting for payment...</p>
             </div>
-             <Alert>
-                <Info className="h-4 w-4" />
-                <AlertTitle>How to Test Locally</AlertTitle>
-                <AlertDescription>
-                    To test this, you must replace the placeholder in the code with your computer's local IP address. Then, connect your phone to the same Wi-Fi network as your computer and scan the code.
-                </AlertDescription>
-            </Alert>
           </CardContent>
         </Card>
       </div>
