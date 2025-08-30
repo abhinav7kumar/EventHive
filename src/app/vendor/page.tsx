@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -42,7 +43,9 @@ export default function VendorDashboardPage() {
                 </CardHeader>
                 <CardContent>
                     <p className="text-muted-foreground mb-4">Find new events to sponsor.</p>
-                    <Button className="w-full">Browse Events</Button>
+                    <Link href="/events" className="w-full">
+                        <Button className="w-full">Browse Events</Button>
+                    </Link>
                 </CardContent>
             </Card>
             <Card>
