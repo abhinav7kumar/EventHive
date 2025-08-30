@@ -1,15 +1,26 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Ticket, Sparkles } from "lucide-react";
+import { Ticket, Sparkles, MessageSquare, Users, UserPlus } from "lucide-react";
 import { getEvents } from "@/lib/mock-data";
 import { getAiRecommendation } from "../actions/ai";
 import { EventCard } from "@/components/event-card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const bookedTickets = [
     { id: '1', title: 'Stellar Sound Fest', date: 'Aug 15, 2024', location: 'Greenfield Valley, CA', quantity: 2 },
     { id: '5', title: 'Modern Art Showcase', date: 'Aug 1, 2024', location: 'The Grand Gallery', quantity: 1 }
 ];
+
+const communityGroups = [
+    { eventId: '1', eventName: 'Stellar Sound Fest', members: 128, description: 'Connect with fellow music lovers!' },
+    { eventId: '2', eventName: 'AI & The Future of Tech', members: 450, description: 'Discuss the latest in AI.' }
+]
+
+const recentChats = [
+    { name: 'Jane Doe', message: 'Excited for the keynote!', avatar: 'https://i.pravatar.cc/150?u=jane' },
+    { name: 'John Smith', message: 'See you at the workshop.', avatar: 'https://i.pravatar.cc/150?u=john' }
+]
 
 export default async function AttendeeDashboardPage() {
   const aiRecommendation = await getAiRecommendation();
@@ -20,9 +31,10 @@ export default async function AttendeeDashboardPage() {
       <h1 className="text-3xl font-bold mb-8">Attendee Dashboard</h1>
 
       <Tabs defaultValue="tickets" className="w-full">
-        <TabsList className="grid w-full grid-cols-3 md:w-[600px]">
+        <TabsList className="grid w-full grid-cols-4 md:w-[800px]">
           <TabsTrigger value="tickets">My Tickets</TabsTrigger>
           <TabsTrigger value="recommendations">For You</TabsTrigger>
+          <TabsTrigger value="community">Community</TabsTrigger>
           <TabsTrigger value="history">Booking History</TabsTrigger>
         </TabsList>
         <TabsContent value="tickets">
@@ -60,6 +72,58 @@ export default async function AttendeeDashboardPage() {
                     {recommendedEvents.map(event => <EventCard key={event.id} event={event} />)}
                 </CardContent>
             </Card>
+        </TabsContent>
+        <TabsContent value="community">
+            <div className="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div className="lg:col-span-2">
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Event Groups</CardTitle>
+                            <CardDescription>Join discussions for events you're attending.</CardDescription>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                            {communityGroups.map(group => (
+                                <div key={group.eventId} className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50">
+                                    <div>
+                                        <h3 className="font-semibold">{group.eventName}</h3>
+                                        <p className="text-sm text-muted-foreground">{group.description}</p>
+                                        <div className="flex items-center text-sm text-muted-foreground mt-1">
+                                            <Users className="h-4 w-4 mr-1"/>
+                                            {group.members} members
+                                        </div>
+                                    </div>
+                                    <Button>Join Group</Button>
+                                </div>
+                            ))}
+                        </CardContent>
+                    </Card>
+                </div>
+                <div>
+                     <Card>
+                        <CardHeader>
+                            <CardTitle>Connections</CardTitle>
+                            <CardDescription>Chat with other attendees.</CardDescription>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                            {recentChats.map(chat => (
+                                <div key={chat.name} className="flex items-center gap-4 p-2 rounded-lg hover:bg-muted/50">
+                                    <Avatar>
+                                        <AvatarImage src={chat.avatar} />
+                                        <AvatarFallback>{chat.name.charAt(0)}</AvatarFallback>
+                                    </Avatar>
+                                    <div>
+                                        <p className="font-semibold">{chat.name}</p>
+                                        <p className="text-sm text-muted-foreground truncate">{chat.message}</p>
+                                    </div>
+                                </div>
+                            ))}
+                            <Button variant="outline" className="w-full">
+                                <MessageSquare className="mr-2"/> View All Chats
+                            </Button>
+                        </CardContent>
+                    </Card>
+                </div>
+            </div>
         </TabsContent>
         <TabsContent value="history">
             <Card className="mt-6">
