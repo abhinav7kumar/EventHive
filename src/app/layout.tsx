@@ -5,6 +5,7 @@ import { SiteHeader } from '@/components/site-header';
 import { Toaster } from '@/components/ui/toaster';
 import { EventProvider } from '@/context/EventContext';
 import { CouponProvider } from '@/context/CouponContext';
+import { ReferralProvider } from '@/context/ReferralContext';
 
 export const metadata: Metadata = {
   title: 'EventSpotlight',
@@ -26,10 +27,12 @@ export default function RootLayout({
       <body className="font-body antialiased min-h-screen flex flex-col">
         <EventProvider>
           <CouponProvider>
-            <SiteHeader />
-            <main className="flex-1">{children}</main>
-            <Footer />
-            <Toaster />
+            <ReferralProvider>
+              <SiteHeader />
+              <main className="flex-1">{children}</main>
+              <Footer />
+              <Toaster />
+            </ReferralProvider>
           </CouponProvider>
         </EventProvider>
       </body>

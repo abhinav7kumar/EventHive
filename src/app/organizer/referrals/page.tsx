@@ -4,7 +4,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, Gift, Percent, Users, Edit, Trash2 } from "lucide-react";
+import { ArrowLeft, Gift, Percent, Users } from "lucide-react";
 import Link from "next/link";
 import {
   Select,
@@ -26,23 +26,16 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
-
-interface ReferralProgram {
-    id: string;
-    eventId: string;
-    friendDiscount: number;
-    advocateReward: number;
-}
+import { useReferrals, ReferralProgram } from "@/context/ReferralContext";
 
 export default function ManageReferralsPage() {
     const myEvents = getEvents().slice(0, 3);
     const { toast } = useToast();
+    const { programs, addProgram } = useReferrals();
 
     const [selectedEventId, setSelectedEventId] = useState('');
     const [friendDiscount, setFriendDiscount] = useState('');
     const [advocateReward, setAdvocateReward] = useState('');
-    const [activePrograms, setActivePrograms] = useState<ReferralProgram[]>([]);
     
     const handleActivateProgram = () => {
         if (!selectedEventId || !friendDiscount || !advocateReward) {
@@ -63,7 +56,7 @@ export default function ManageReferralsPage() {
             advocateReward: parseInt(advocateReward, 10),
         };
 
-        setActivePrograms(prev => [...prev, newProgram]);
+        addProgram(newProgram);
 
         toast({
             title: "Referral Program Activated!",
@@ -143,7 +136,7 @@ export default function ManageReferralsPage() {
                     </CardContent>
                 </Card>
 
-                {activePrograms.length > 0 && (
+                {programs.length > 0 && (
                      <Card>
                         <CardHeader>
                             <CardTitle>Active Referral Programs</CardTitle>
@@ -159,7 +152,7 @@ export default function ManageReferralsPage() {
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
-                                    {activePrograms.map(program => {
+                                    {programs.map(program => {
                                         const event = getEventById(program.eventId);
                                         return (
                                             <TableRow key={program.id}>
