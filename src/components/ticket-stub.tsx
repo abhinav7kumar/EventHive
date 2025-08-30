@@ -10,6 +10,16 @@ interface TicketStubProps {
 }
 
 export const TicketStub = React.forwardRef<HTMLDivElement, TicketStubProps>(({ ticket }, ref) => {
+    const qrData = {
+        ticketId: ticket.id,
+        event: ticket.title,
+        date: ticket.date,
+        location: ticket.location,
+        attendee: 'John Doe', // This is currently hardcoded
+        quantity: ticket.quantity || 1
+    };
+    const encodedQrData = encodeURIComponent(JSON.stringify(qrData));
+
     return (
         <div ref={ref} className="bg-card text-card-foreground rounded-2xl shadow-lg w-full max-w-sm mx-auto font-sans">
             <div className="p-6">
@@ -52,7 +62,7 @@ export const TicketStub = React.forwardRef<HTMLDivElement, TicketStubProps>(({ t
 
             <div className="p-6 flex items-center gap-4">
                 <Image
-                    src={`https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=ticket-${ticket.id}`}
+                    src={`https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${encodedQrData}`}
                     alt="Ticket QR Code"
                     width={100}
                     height={100}
