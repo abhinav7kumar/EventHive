@@ -1,3 +1,4 @@
+
 export type EventCategory = 'Music' | 'Sports' | 'Technology' | 'Conference' | 'Arts' | 'Food';
 
 export type Event = {
@@ -41,6 +42,7 @@ export type Attendee = {
   avatar: string;
   eventsAttended: number;
   lastActive: string;
+  status?: 'Active' | 'Suspended';
 };
 
 export type Organizer = {
@@ -55,6 +57,7 @@ export type Organizer = {
 
 export type Vendor = {
   id: string;
+  name?: string;
   companyName: string;
   contactName: string;
   email: string;
