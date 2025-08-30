@@ -11,7 +11,6 @@ import { SiteHeader } from "@/components/site-header";
 export default function VendorDashboardPage() {
   const sponsoredEvents = [
     { id: '1', title: 'Oddo X CGC Hackathon', status: 'Active' },
-    { id: '3', title: 'Culinary Canvas', status: 'Upcoming' },
   ];
 
   return (
