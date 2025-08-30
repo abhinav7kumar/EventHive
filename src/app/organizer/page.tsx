@@ -5,7 +5,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getEvents } from "@/lib/mock-data";
-import { PlusCircle, Edit, BarChart3, Users, Ticket, Percent, QrCode, Star, Download, DollarSign, Activity } from "lucide-react";
+import { PlusCircle, Edit, BarChart3, Users, Ticket, Percent, QrCode, Star, Download, DollarSign, Activity, Gift } from "lucide-react";
 import Link from "next/link";
 import {
   Table,
@@ -231,8 +231,19 @@ export default function OrganizerDashboardPage() {
                             <Link href="/organizer/discounts" className="w-full">
                                 <Button variant="outline" className="w-full justify-start">Manage Discounts</Button>
                             </Link>
-                            <Button variant="outline" className="w-full justify-start">Referral Rewards</Button>
                           </CardContent>
+                        </Card>
+                        
+                        <Card>
+                            <CardHeader>
+                                <CardTitle className="flex items-center gap-2"><Gift /> Referral Rewards</CardTitle>
+                                <CardDescription>Incentivize word-of-mouth marketing.</CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <Link href="/organizer/referrals">
+                                    <Button variant="outline" className="w-full">Set Up a Program</Button>
+                                </Link>
+                            </CardContent>
                         </Card>
 
                         <Card>
