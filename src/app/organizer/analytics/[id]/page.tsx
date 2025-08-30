@@ -7,6 +7,27 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, BarChart2, DollarSign, Ticket, Users } from 'lucide-react';
 import Link from 'next/link';
+import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts"
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
+
+
+const salesData = [
+  { date: '2024-07-01', tickets: 50 },
+  { date: '2024-07-02', tickets: 75 },
+  { date: '2024-07-03', tickets: 60 },
+  { date: '2024-07-04', tickets: 120 },
+  { date: '2024-07-05', tickets: 90 },
+  { date: '2024-07-06', tickets: 150 },
+  { date: '2024-07-07', tickets: 130 },
+];
+
+const chartConfig = {
+  tickets: {
+    label: "Tickets",
+    color: "hsl(var(--primary))",
+  },
+} satisfies import("@/components/ui/chart").ChartConfig
+
 
 export default function EventAnalyticsPage() {
     const params = useParams();
@@ -81,9 +102,27 @@ export default function EventAnalyticsPage() {
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <div className="h-[350px] w-full bg-muted rounded-lg flex items-center justify-center">
-                            <p className="text-muted-foreground">Chart component will be displayed here.</p>
-                        </div>
+                        <ChartContainer config={chartConfig} className="h-[350px] w-full">
+                           <BarChart accessibilityLayer data={salesData}>
+                               <XAxis
+                                dataKey="date"
+                                tickLine={false}
+                                axisLine={false}
+                                tickMargin={8}
+                                tickFormatter={(value) => new Date(value).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                               />
+                                <YAxis 
+                                    tickLine={false}
+                                    axisLine={false}
+                                    tickMargin={8}
+                                />
+                               <ChartTooltip
+                                cursor={false}
+                                content={<ChartTooltipContent indicator="dot" />}
+                               />
+                                <Bar dataKey="tickets" fill="var(--color-tickets)" radius={4} />
+                           </BarChart>
+                        </ChartContainer>
                     </CardContent>
                 </Card>
             </div>
