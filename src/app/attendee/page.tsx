@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
-import { Ticket, Sparkles, MessageSquare, Users, UserPlus, QrCode, X, Download } from "lucide-react";
+import { Ticket, Sparkles, MessageSquare, Users, UserPlus, QrCode, X, Download, ExternalLink } from "lucide-react";
 import { getEvents } from "@/lib/mock-data";
 import { getAiRecommendation } from "../actions/ai";
 import { EventCard } from "@/components/event-card";
@@ -14,6 +14,7 @@ import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import html2canvas from 'html2canvas';
 import { TicketStub } from "@/components/ticket-stub";
+import Link from "next/link";
 
 const bookedTickets = [
     { id: '1', title: 'Stellar Sound Fest', date: 'Aug 15, 2024', location: 'Greenfield Valley, CA', quantity: 2 },
@@ -121,6 +122,9 @@ export default function AttendeeDashboardPage() {
                           </div>
                       </CardContent>
                       <CardFooter className="flex gap-2">
+                          <Button variant="outline" className="w-full" asChild>
+                              <Link href={`/events/${ticket.id}`}><ExternalLink className="mr-2 h-4 w-4" />View Event</Link>
+                          </Button>
                           <Button className="w-full" onClick={() => handleViewTicket(ticket)}>View Ticket</Button>
                       </CardFooter>
                   </Card>
