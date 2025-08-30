@@ -2,7 +2,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { PlusCircle, Users, BarChart2, Settings, CreditCard, ShieldCheck, Megaphone, CheckCircle, XCircle } from "lucide-react";
 import Link from "next/link";
-import { Badge } from "@/components/ui/badge";
 
 const pendingEvents = [
     { id: '1', title: 'Community Charity Run', organizer: 'Civic Group' },
@@ -31,8 +30,10 @@ export default function AdminDashboardPage() {
         <div className="space-y-8">
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                    <Users /> User Management
+                <CardTitle>
+                    <span className="flex items-center gap-2">
+                        <Users /> User Management
+                    </span>
                 </CardTitle>
                 <CardDescription>Oversee all platform users.</CardDescription>
               </CardHeader>
@@ -45,8 +46,10 @@ export default function AdminDashboardPage() {
 
             <Card>
                 <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                        <CreditCard /> Payment & Finance
+                    <CardTitle>
+                        <span className="flex items-center gap-2">
+                            <CreditCard /> Payment & Finance
+                        </span>
                     </CardTitle>
                     <CardDescription>Monitor all financial activities.</CardDescription>
                 </CardHeader>
@@ -83,8 +86,10 @@ export default function AdminDashboardPage() {
             </Card>
              <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                    <BarChart2 /> Analytics & Reports
+                <CardTitle>
+                    <span className="flex items-center gap-2">
+                        <BarChart2 /> Analytics & Reports
+                    </span>
                 </CardTitle>
                  <CardDescription>Get insights on platform performance.</CardDescription>
               </CardHeader>
@@ -98,8 +103,10 @@ export default function AdminDashboardPage() {
         <div className="space-y-8">
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                    <Settings /> System Rules & Settings
+                <CardTitle>
+                    <span className="flex items-center gap-2">
+                        <Settings /> System Rules & Settings
+                    </span>
                 </CardTitle>
                  <CardDescription>Configure platform-wide settings.</CardDescription>
               </CardHeader>
@@ -111,8 +118,10 @@ export default function AdminDashboardPage() {
             </Card>
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                    <ShieldCheck /> Security & Compliance
+                <CardTitle>
+                    <span className="flex items-center gap-2">
+                        <ShieldCheck /> Security & Compliance
+                    </span>
                 </CardTitle>
                  <CardDescription>Monitor security and data privacy.</CardDescription>
               </CardHeader>
@@ -124,8 +133,10 @@ export default function AdminDashboardPage() {
             </Card>
              <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                    Dashboard Customization
+                <CardTitle>
+                    <span className="flex items-center gap-2">
+                        Dashboard Customization
+                    </span>
                 </CardTitle>
               </CardHeader>
               <CardContent>
