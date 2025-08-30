@@ -1,7 +1,7 @@
 
 'use client';
 
-import { Suspense, useEffect } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useSearchParams, useRouter, notFound } from 'next/navigation';
 import Image from 'next/image';
 import { getEventById } from '@/lib/mock-data';
@@ -11,23 +11,55 @@ import { ArrowLeft, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { SiteHeader } from '@/components/site-header';
 
+function usePaymentStatus(transactionId: string) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const eventId = searchParams.get('eventId');
+
+  useEffect(() => {
+    if (!transactionId) return;
+
+    // This function polls localStorage to check if the payment was "completed" on the mobile page.
+    const interval = setInterval(() => {
+      try {
+        const status = localStorage.getItem(`payment_${transactionId}`);
+        if (status === 'PAID') {
+          clearInterval(interval);
+          localStorage.removeItem(`payment_${transactionId}`); // Clean up
+          router.push(`/checkout/confirmation?eventId=${eventId}`);
+        }
+      } catch (error) {
+        console.error("Could not access localStorage:", error);
+        clearInterval(interval);
+      }
+    }, 2000); // Check every 2 seconds
+
+    return () => clearInterval(interval); // Cleanup on component unmount
+  }, [transactionId, eventId, router]);
+}
+
+
 function PaymentQRCode() {
   const router = useRouter();
   const searchParams = useSearchParams();
   
   const eventId = searchParams.get('eventId');
   const ticketsParam = searchParams.get('tickets');
+  
+  // Generate a unique ID for this transaction
+  const [transactionId] = useState(() => `txn_${Date.now()}`);
 
+  // Start polling for payment status
+  usePaymentStatus(transactionId);
+  
   useEffect(() => {
-    // Simulate scanning the QR code and payment processing.
-    const timer = setTimeout(() => {
-      if (eventId) {
-        router.push(`/checkout/confirmation?eventId=${eventId}`);
-      }
-    }, 4000); // 4-second delay to simulate scanning and payment
-
-    return () => clearTimeout(timer); // Cleanup timer on component unmount
-  }, [eventId, router]);
+     // Set initial payment status to PENDING
+     try {
+        localStorage.setItem(`payment_${transactionId}`, 'PENDING');
+     } catch (error) {
+        console.error("Could not access localStorage:", error);
+     }
+  }, [transactionId]);
 
 
   if (!eventId || !ticketsParam) {
@@ -38,12 +70,19 @@ function PaymentQRCode() {
     return notFound();
   }
 
-  const qrData = {
-    eventId,
-    tickets: ticketsParam,
-    total: 'CalculatedTotal' // In a real app, you'd pass the total amount here
-  }
-  const encodedQrData = encodeURIComponent(JSON.stringify(qrData));
+  const selectedTickets = ticketsParam.split(',').map(t => {
+    const [ticketId, quantity] = t.split(':');
+    const ticketInfo = event.tickets.find(ti => ti.id === ticketId);
+    return { ...ticketInfo, quantity: parseInt(quantity, 10) };
+  });
+
+  const subtotal = selectedTickets.reduce((acc, ticket) => acc + (ticket.price || 0) * ticket.quantity, 0);
+  const processingFee = subtotal * 0.05;
+  const total = subtotal + processingFee;
+
+  // The QR code now points to a mobile payment page with the transaction details
+  const mobilePaymentUrl = `${window.location.origin}/checkout/pay-mobile?transactionId=${transactionId}&eventId=${eventId}&total=${total.toFixed(2)}`;
+  const encodedQrData = encodeURIComponent(mobilePaymentUrl);
 
 
   return (
@@ -58,7 +97,7 @@ function PaymentQRCode() {
         <Card>
           <CardHeader className="text-center">
             <CardTitle>Scan to Pay</CardTitle>
-            <CardDescription>Use your mobile payment app to scan the QR code below.</CardDescription>
+            <CardDescription>Use your mobile phone's camera to scan the QR code and complete the payment.</CardDescription>
           </CardHeader>
           <CardContent className="flex flex-col items-center justify-center space-y-6">
             <div className="p-4 border rounded-lg bg-white">
@@ -72,8 +111,11 @@ function PaymentQRCode() {
             </div>
             <div className="flex items-center space-x-2 text-muted-foreground animate-pulse">
                 <Loader2 className="h-5 w-5 animate-spin" />
-                <p>Waiting for payment confirmation...</p>
+                <p>Waiting for payment...</p>
             </div>
+             <p className="text-xs text-center text-muted-foreground pt-4">
+              This is a live simulation. Scan the code with your phone's camera to open the payment page on your mobile device.
+            </p>
           </CardContent>
         </Card>
       </div>
