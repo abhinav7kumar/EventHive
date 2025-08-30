@@ -27,37 +27,11 @@ export default function EventDetailPage({ params }: { params: { id: string } }) 
   const event = getEventById(params.id);
   const [ticketQuantities, setTicketQuantities] = useState<Record<string, number>>({});
   const [formattedDate, setFormattedDate] = useState('');
-  const [calendarLink, setCalendarLink] = useState('');
   const { toast } = useToast();
 
   useEffect(() => {
     if (event) {
       setFormattedDate(format(new Date(event.date), 'PPPP p'));
-
-      const formatDateForICS = (date: Date) => {
-        return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
-      };
-
-      const startDate = new Date(event.date);
-      // Assuming event is 2 hours long
-      const endDate = new Date(startDate.getTime() + 2 * 60 * 60 * 1000);
-
-      const icsContent = [
-        'BEGIN:VCALENDAR',
-        'VERSION:2.0',
-        'BEGIN:VEVENT',
-        `UID:${event.id}@eventplatform.com`,
-        `DTSTAMP:${formatDateForICS(new Date())}`,
-        `DTSTART:${formatDateForICS(startDate)}`,
-        `DTEND:${formatDateForICS(endDate)}`,
-        `SUMMARY:${event.title}`,
-        `DESCRIPTION:${event.shortDescription.replace(/\n/g, '\\n')}`,
-        `LOCATION:${event.venue.address}`,
-        'END:VEVENT',
-        'END:VCALENDAR'
-      ].join('\n');
-
-      setCalendarLink(`data:text/calendar;charset=utf-8,${encodeURIComponent(icsContent)}`);
     }
   }, [event]);
 
@@ -296,11 +270,6 @@ export default function EventDetailPage({ params }: { params: { id: string } }) 
                 <CardHeader><CardTitle>Engage</CardTitle></CardHeader>
                 <CardContent className="flex flex-col gap-2">
                     <Button variant="outline" onClick={handleShare}><Share2 className="mr-2"/>Share Event</Button>
-                     <Button variant="outline" asChild>
-                        <a href={calendarLink} download={`${event.title}.ics`}>
-                          <CalendarPlus className="mr-2"/>Add to Calendar
-                        </a>
-                     </Button>
                      <div className="flex items-center justify-center pt-2">
                         <Hash className="h-5 w-5 text-muted-foreground"/>
                         <p className="font-semibold text-primary">#{event.title.replace(/\s/g, '')}</p>
