@@ -54,7 +54,9 @@ export default function VendorDashboardPage() {
                 </CardHeader>
                 <CardContent>
                      <p className="text-muted-foreground mb-4">Manage your virtual or physical stalls.</p>
-                     <Button variant="outline" className="w-full">View Stalls</Button>
+                     <Link href="/vendor/stalls" className="w-full">
+                        <Button variant="outline" className="w-full">View Stalls</Button>
+                     </Link>
                 </CardContent>
             </Card>
             <Card>
