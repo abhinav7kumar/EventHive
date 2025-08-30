@@ -73,7 +73,7 @@ export default function ManageReferralsPage() {
         const event = getEventById(program.eventId);
         if (!event) return;
 
-        const referralLink = `${window.location.origin}/events/${program.eventId}?ref=${program.id}`;
+        const referralLink = `${window.location.origin}/referral/${program.id}`;
         
         const message = `Hey! Check out this event: "${event.title}". Use my referral to get ${program.friendDiscount}% off your ticket! ${referralLink}`;
         
