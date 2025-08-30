@@ -153,9 +153,15 @@ export default function AdminDashboardPage() {
                         <CardDescription>Oversee transactions, refunds, and settlements.</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-2">
-                        <Button variant="outline" className="w-full justify-start">View All Transactions</Button>
-                        <Button variant="outline" className="w-full justify-start">Manage Refunds</Button>
-                        <Button variant="outline" className="w-full justify-start">Track Settlements</Button>
+                        <Link href="/admin/finance/transactions">
+                          <Button variant="outline" className="w-full justify-start">View All Transactions</Button>
+                        </Link>
+                        <Link href="/admin/finance/refunds">
+                          <Button variant="outline" className="w-full justify-start">Manage Refunds</Button>
+                        </Link>
+                        <Link href="/admin/finance/settlements">
+                          <Button variant="outline" className="w-full justify-start">Track Settlements</Button>
+                        </Link>
                     </CardContent>
                 </Card>
 
