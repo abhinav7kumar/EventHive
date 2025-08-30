@@ -18,7 +18,7 @@ import { TicketStub } from "@/components/ticket-stub";
 import Link from "next/link";
 
 const bookedTickets = [
-    { id: '1', title: 'Stellar Sound Fest', date: 'Aug 15, 2024', location: 'Greenfield Valley, CA', quantity: 2 },
+    { id: '1', title: 'Odoo X CGC Mohali Hackathon 2025', date: 'Aug 30, 2025', location: 'Mohali, Punjab', quantity: 4 },
     { id: '5', title: 'Modern Art Showcase', date: 'Aug 1, 2024', location: 'The Grand Gallery', quantity: 1 }
 ];
 

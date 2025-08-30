@@ -5,7 +5,7 @@ const mockEvents: Event[] = [
     id: '1',
     title: 'Odoo X CGC Mohali',
     shortDescription: 'An electrifying weekend of music under the stars.',
-    description: 'Join us for the 3rd annual Stellar Sound Fest, featuring a diverse lineup of indie rock, electronic, and pop artists. Experience two days of non-stop music, art installations, and gourmet food trucks in the beautiful Greenfield Valley.',
+    description: 'Join us for the 3rd annual odooXcgc Hackathon, bringing together visionary developers, designers, and entrepreneurs. Experience two days of rapid coding, creative challenges, and collaboration in the dynamic Innovation Valley hub, with expert mentorship, startup demos, and transformative networking opportunities.',
     image: 'https://picsum.photos/seed/music1/1200/800',
     date: '2025-08-30T18:00:00Z',
     location: 'CGC University, Mohali',
@@ -13,12 +13,12 @@ const mockEvents: Event[] = [
     isFeatured: true,
     venue: { name: 'CGC University, Mohali', address: 'CGC University, Mohali' },
     schedule: [
-      { time: '18:00', activity: 'Gates Open', details: 'Doors open for all ticket holders.' },
-      { time: '19:00', activity: 'Opening Act: The Voids', details: 'Kicking off the night with some fresh indie sounds.' },
-      { time: '21:00', activity: 'Headliner: Galaxy Drifters', details: 'The main event! Get ready for an unforgettable performance.' },
+      { time: '10:00', activity: 'Gates Open', details: 'Doors open for all ticket holders.' },
+      { time: '11:00', activity: 'Coding Started', details: 'The hackathon begins! Good luck to all participants.' },
+      { time: '13:00', activity: 'Lunch at Canteen', details: 'A break for lunch will be provided at the canteen.' },
     ],
     speakers: [],
-    tickets: [{ id: 't1', name: 'General', price: 75, quantity: 2000, saleStartDate: '2024-05-01', saleEndDate: '2025-08-30' }],
+    tickets: [{ id: 't1', name: 'General', price: 50, quantity: 2000, saleStartDate: '2024-05-01', saleEndDate: '2025-08-30' }],
     published: true,
     organizer: 'Stellar Productions',
     externalLink: '#',
@@ -116,7 +116,7 @@ export const getEvents = (): Event[] => mockEvents;
 
 export const getEventById = (id: string): Event | undefined => mockEvents.find(event => event.id === id);
 
-export const getFeaturedEvents = (): Event[] => mockEvents.filter(event => event.isFeatured);
+export const getFeaturedEvents = (): Event[] => mockEvents.find(event => event.isFeatured);
 
 export const getTrendingEvents = (): Event[] => mockEvents.filter(event => event.isTrending);
 
