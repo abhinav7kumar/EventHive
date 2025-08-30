@@ -257,16 +257,6 @@ export default function OrganizerDashboardPage() {
                                 </Link>
                             </CardContent>
                         </Card>
-
-                        <Card>
-                          <CardHeader>
-                            <CardTitle className="flex items-center gap-2"><Users /> Collaboration</CardTitle>
-                             <CardDescription>Manage roles for your event team.</CardDescription>
-                          </CardHeader>
-                          <CardContent>
-                             <Button variant="outline" className="w-full">Assign Roles</Button>
-                          </CardContent>
-                        </Card>
                     </div>
                 </div>
             </div>
