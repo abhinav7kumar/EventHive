@@ -5,9 +5,9 @@ import { useParams, notFound, useRouter } from 'next/navigation';
 import { getEventById } from '@/lib/mock-data';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, BarChart2, Eye, MousePointerClick, Target, Image as ImageIcon } from 'lucide-react';
+import { ArrowLeft, BarChart2, Eye, MousePointerClick, Target, Image as ImageIcon, TrendingUp, PieChart as PieChartIcon } from 'lucide-react';
 import Link from 'next/link';
-import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts"
+import { Line, LineChart, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis, Legend, Cell } from "recharts"
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 import Image from 'next/image';
 
@@ -20,6 +20,13 @@ const engagementData = [
   { date: '2024-08-29', engagement: 280 },
   { date: '2024-08-30', engagement: 250 },
 ];
+
+const engagementBreakdownData = [
+  { name: 'Impressions', value: 150234, fill: 'hsl(var(--chart-1))' },
+  { name: 'Clicks', value: 3755, fill: 'hsl(var(--chart-2))'  },
+  { name: 'Leads', value: 128, fill: 'hsl(var(--chart-3))'  },
+];
+
 
 const chartConfig = {
   engagement: {
@@ -94,7 +101,7 @@ export default function SponsorshipAnalyticsPage() {
                             <CardHeader>
                                 <CardTitle>
                                   <span className="flex items-center gap-2">
-                                      <BarChart2 /> Engagement Over Time
+                                      <TrendingUp /> Engagement Over Time
                                   </span>
                                 </CardTitle>
                                 <CardDescription>
@@ -103,31 +110,53 @@ export default function SponsorshipAnalyticsPage() {
                             </CardHeader>
                             <CardContent>
                                 <ChartContainer config={chartConfig} className="h-[350px] w-full">
-                                   <BarChart accessibilityLayer data={engagementData}>
-                                       <XAxis
-                                        dataKey="date"
-                                        tickLine={false}
-                                        axisLine={false}
-                                        tickMargin={8}
-                                        tickFormatter={(value) => new Date(value).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-                                       />
+                                   <LineChart accessibilityLayer data={engagementData}>
+                                        <XAxis
+                                            dataKey="date"
+                                            tickLine={false}
+                                            axisLine={false}
+                                            tickMargin={8}
+                                            tickFormatter={(value) => new Date(value).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                                        />
                                         <YAxis 
                                             tickLine={false}
                                             axisLine={false}
                                             tickMargin={8}
                                         />
                                        <ChartTooltip
-                                        cursor={false}
-                                        content={<ChartTooltipContent indicator="dot" />}
+                                            cursor={false}
+                                            content={<ChartTooltipContent indicator="dot" />}
                                        />
-                                        <Bar dataKey="engagement" fill="var(--color-engagement)" radius={4} />
-                                   </BarChart>
+                                       <Legend />
+                                       <Line type="monotone" dataKey="engagement" stroke="var(--color-engagement)" strokeWidth={2} dot={false} />
+                                   </LineChart>
                                 </ChartContainer>
                             </CardContent>
                         </Card>
                     </div>
 
                     <div className="space-y-8">
+                         <Card>
+                            <CardHeader>
+                                <CardTitle className="flex items-center gap-2">
+                                    <PieChartIcon /> Engagement Breakdown
+                                </CardTitle>
+                                <CardDescription>A snapshot of user interactions.</CardDescription>
+                            </CardHeader>
+                             <CardContent className="flex items-center justify-center">
+                                <ChartContainer config={chartConfig} className="h-[250px] w-full">
+                                    <PieChart>
+                                        <Tooltip content={<ChartTooltipContent hideLabel />} />
+                                        <Pie data={engagementBreakdownData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} label>
+                                            {engagementBreakdownData.map((entry, index) => (
+                                                <Cell key={`cell-${index}`} fill={entry.fill} />
+                                            ))}
+                                        </Pie>
+                                        <Legend />
+                                    </PieChart>
+                                </ChartContainer>
+                            </CardContent>
+                        </Card>
                         <Card>
                             <CardHeader>
                                 <CardTitle className="flex items-center gap-2">
