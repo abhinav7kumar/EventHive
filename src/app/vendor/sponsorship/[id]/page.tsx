@@ -177,31 +177,6 @@ export default function SponsorshipAnalyticsPage() {
                                 </ChartContainer>
                             </CardContent>
                         </Card>
-                        <Card>
-                            <CardHeader>
-                                <CardTitle className="flex items-center gap-2">
-                                    <ImageIcon /> Creative Assets
-                                </CardTitle>
-                                <CardDescription>Your branding materials for this event.</CardDescription>
-                            </CardHeader>
-                            <CardContent className="space-y-4">
-                                <div className="border rounded-lg p-2 flex items-center gap-4">
-                                    <Image src="https://placehold.co/100x50" alt="Company Logo" width={100} height={50} className="rounded" />
-                                    <div>
-                                        <p className="font-semibold">Company Logo</p>
-                                        <p className="text-xs text-muted-foreground">PNG - 256KB</p>
-                                    </div>
-                                </div>
-                                <div className="border rounded-lg p-2 flex items-center gap-4">
-                                    <Image src="https://placehold.co/100x50" alt="Promotional Banner" width={100} height={50} className="rounded object-cover" />
-                                    <div>
-                                        <p className="font-semibold">Promo Banner</p>
-                                        <p className="text-xs text-muted-foreground">JPG - 1.2MB</p>
-                                    </div>
-                                </div>
-                                <Button variant="outline" className="w-full">Upload New Asset</Button>
-                            </CardContent>
-                        </Card>
                     </div>
                 </div>
             </div>
