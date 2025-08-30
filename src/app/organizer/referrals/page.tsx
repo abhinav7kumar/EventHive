@@ -73,9 +73,7 @@ export default function ManageReferralsPage() {
         const event = getEventById(program.eventId);
         if (!event) return;
 
-        const referralLink = `${window.location.origin}/referral/${program.id}`;
-        
-        const message = `Hey! Check out this event: "${event.title}". Use my referral to get ${program.friendDiscount}% off your ticket! ${referralLink}`;
+        const message = `Check out this referral offer for the event: "${event.title}"!\n\n- Friend's Discount: ${program.friendDiscount}% OFF\n- Your Reward: ${program.advocateReward}% OFF a future event\n\nInvite your friends to book their tickets!`;
         
         const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
         
