@@ -1,38 +1,34 @@
 
 'use client';
 
-import { Suspense } from 'react';
+import { Suspense, useEffect } from 'react';
 import { useSearchParams, useRouter, notFound } from 'next/navigation';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
+import Image from 'next/image';
 import { getEventById } from '@/lib/mock-data';
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { useToast } from '@/hooks/use-toast';
-import { ArrowLeft, Lock } from 'lucide-react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { ArrowLeft, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { SiteHeader } from '@/components/site-header';
 
-const paymentSchema = z.object({
-  name: z.string().min(2, { message: "Name must be at least 2 characters." }),
-  cardNumber: z.string().regex(/^\d{16}$/, { message: "Card number must be 16 digits." }),
-  expiry: z.string().regex(/^(0[1-9]|1[0-2])\/\d{2}$/, { message: "Expiry must be in MM/YY format." }),
-  cvc: z.string().regex(/^\d{3}$/, { message: "CVC must be 3 digits." }),
-});
-
-type PaymentFormValues = z.infer<typeof paymentSchema>;
-
-function PaymentForm() {
+function PaymentQRCode() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { toast } = useToast();
   
   const eventId = searchParams.get('eventId');
   const ticketsParam = searchParams.get('tickets');
+
+  useEffect(() => {
+    // Simulate scanning the QR code and payment processing.
+    const timer = setTimeout(() => {
+      if (eventId) {
+        router.push(`/checkout/confirmation?eventId=${eventId}`);
+      }
+    }, 4000); // 4-second delay to simulate scanning and payment
+
+    return () => clearTimeout(timer); // Cleanup timer on component unmount
+  }, [eventId, router]);
+
 
   if (!eventId || !ticketsParam) {
     return notFound();
@@ -42,27 +38,13 @@ function PaymentForm() {
     return notFound();
   }
 
-  const form = useForm<PaymentFormValues>({
-    resolver: zodResolver(paymentSchema),
-    defaultValues: {
-      name: "",
-      cardNumber: "",
-      expiry: "",
-      cvc: "",
-    },
-  });
+  const qrData = {
+    eventId,
+    tickets: ticketsParam,
+    total: 'CalculatedTotal' // In a real app, you'd pass the total amount here
+  }
+  const encodedQrData = encodeURIComponent(JSON.stringify(qrData));
 
-  const onSubmit = (data: PaymentFormValues) => {
-    // Mock payment processing
-    toast({
-      title: "Processing Payment...",
-      description: "Please wait while we confirm your transaction.",
-    });
-
-    setTimeout(() => {
-      router.push(`/checkout/confirmation?eventId=${eventId}`);
-    }, 2000);
-  };
 
   return (
     <>
@@ -74,72 +56,24 @@ function PaymentForm() {
               </Button>
           </Link>
         <Card>
-          <CardHeader>
-            <CardTitle>Payment Details</CardTitle>
-            <CardDescription>Enter your payment information below. All transactions are secure.</CardDescription>
+          <CardHeader className="text-center">
+            <CardTitle>Scan to Pay</CardTitle>
+            <CardDescription>Use your mobile payment app to scan the QR code below.</CardDescription>
           </CardHeader>
-          <CardContent>
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                <FormField
-                  control={form.control}
-                  name="name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Name on Card</FormLabel>
-                      <FormControl>
-                        <Input placeholder="John Doe" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+          <CardContent className="flex flex-col items-center justify-center space-y-6">
+            <div className="p-4 border rounded-lg bg-white">
+                 <Image
+                    src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodedQrData}`}
+                    alt="Payment QR Code"
+                    width={250}
+                    height={250}
+                    data-ai-hint="qr code"
                 />
-                <FormField
-                  control={form.control}
-                  name="cardNumber"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Card Number</FormLabel>
-                      <FormControl>
-                        <Input placeholder="1234 5678 1234 5678" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <div className="grid grid-cols-2 gap-4">
-                  <FormField
-                    control={form.control}
-                    name="expiry"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Expiry Date</FormLabel>
-                        <FormControl>
-                          <Input placeholder="MM/YY" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="cvc"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>CVC</FormLabel>
-                        <FormControl>
-                          <Input placeholder="123" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                 <Button type="submit" className="w-full" size="lg" disabled={form.formState.isSubmitting}>
-                    {form.formState.isSubmitting ? "Processing..." : <> <Lock className="mr-2 h-4 w-4"/> Pay Now </>}
-                 </Button>
-              </form>
-            </Form>
+            </div>
+            <div className="flex items-center space-x-2 text-muted-foreground animate-pulse">
+                <Loader2 className="h-5 w-5 animate-spin" />
+                <p>Waiting for payment confirmation...</p>
+            </div>
           </CardContent>
         </Card>
       </div>
@@ -150,7 +84,7 @@ function PaymentForm() {
 export default function PaymentPage() {
     return (
         <Suspense fallback={<div>Loading...</div>}>
-            <PaymentForm />
+            <PaymentQRCode />
         </Suspense>
     )
 }
