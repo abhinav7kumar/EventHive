@@ -155,8 +155,12 @@ export default function OrganizerDashboardPage() {
                                                 <TableCell>850 / 1000</TableCell>
                                                 <TableCell>$12,500</TableCell>
                                                 <TableCell className="text-right">
-                                                    <Button variant="ghost" size="icon"><BarChart3 className="h-4 w-4"/></Button>
-                                                    <Button variant="ghost" size="icon"><Edit className="h-4 w-4"/></Button>
+                                                    <Link href={`/organizer/analytics/${event.id}`}>
+                                                        <Button variant="ghost" size="icon"><BarChart3 className="h-4 w-4"/></Button>
+                                                    </Link>
+                                                    <Link href={`/create-event?eventId=${event.id}`}>
+                                                        <Button variant="ghost" size="icon"><Edit className="h-4 w-4"/></Button>
+                                                    </Link>
                                                 </TableCell>
                                             </TableRow>
                                         ))}

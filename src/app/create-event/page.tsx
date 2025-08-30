@@ -1,6 +1,7 @@
+
 'use client';
 
-import { useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -13,16 +14,37 @@ import { PlusCircle, Trash2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useEvents } from "@/context/EventContext";
 import type { Event } from "@/types";
+import { useSearchParams } from "next/navigation";
+import { getEventById } from "@/lib/mock-data";
+import { format } from "date-fns";
 
-export default function CreateEventPage() {
+function CreateEventForm() {
   const { addEvent } = useEvents();
   const { toast } = useToast();
+  const searchParams = useSearchParams();
+  const eventId = searchParams.get('eventId');
   
+  const [isEditMode, setIsEditMode] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [date, setDate] = useState('');
   const [category, setCategory] = useState('');
   const [venue, setVenue] = useState('');
+
+  useEffect(() => {
+    if (eventId) {
+      const event = getEventById(eventId);
+      if (event) {
+        setIsEditMode(true);
+        setTitle(event.title);
+        setDescription(event.description);
+        // The browser expects 'yyyy-MM-ddThh:mm' format for datetime-local input
+        setDate(format(new Date(event.date), "yyyy-MM-dd'T'HH:mm"));
+        setCategory(event.category);
+        setVenue(event.venue.address);
+      }
+    }
+  }, [eventId]);
 
   const handlePublish = () => {
     if(!title || !description || !date || !category || !venue) {
@@ -32,6 +54,14 @@ export default function CreateEventPage() {
             variant: "destructive"
         })
         return;
+    }
+    
+    if (isEditMode) {
+       toast({
+          title: "Event Updated!",
+          description: "Your event details have been successfully saved.",
+      });
+      return;
     }
 
     const newEvent: Event = {
@@ -71,8 +101,8 @@ export default function CreateEventPage() {
     <div className="container mx-auto px-4 py-12 max-w-4xl">
       <Card>
         <CardHeader>
-          <CardTitle>Create a New Event</CardTitle>
-          <CardDescription>Fill in the details below to set up your event.</CardDescription>
+          <CardTitle>{isEditMode ? 'Edit Event' : 'Create a New Event'}</CardTitle>
+          <CardDescription>{isEditMode ? 'Update the details for your event below.' : 'Fill in the details below to set up your event.'}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-8">
           <div className="space-y-2">
@@ -178,10 +208,19 @@ export default function CreateEventPage() {
 
            <div className="flex justify-end gap-2">
             <Button variant="outline">Save as Draft</Button>
-            <Button onClick={handlePublish}>Publish Event</Button>
+            <Button onClick={handlePublish}>{isEditMode ? 'Update Event' : 'Publish Event'}</Button>
            </div>
         </CardContent>
       </Card>
     </div>
   );
+}
+
+
+export default function CreateEventPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <CreateEventForm />
+    </Suspense>
+  )
 }
