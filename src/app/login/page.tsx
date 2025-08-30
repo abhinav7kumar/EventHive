@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Button } from "@/components/ui/button";
@@ -7,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Ticket, User, Shield, Briefcase, LayoutDashboard } from "lucide-react";
 import Link from "next/link";
+import { SiteHeader } from "@/components/site-header";
 
 function LoginForm({ role, email, password, dashboardPath }: { role: string, email?: string, password?: string, dashboardPath: string }) {
     return (
@@ -35,14 +37,16 @@ function LoginForm({ role, email, password, dashboardPath }: { role: string, ema
 
 export default function LoginPage() {
   return (
+    <>
+    <SiteHeader />
     <div className="flex items-center justify-center min-h-[calc(100vh-10rem)] py-12">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
             <div className="flex justify-center mb-2">
                 <Ticket className="h-8 w-8 text-primary"/>
             </div>
-          <CardTitle>Welcome to EventSpotlight</CardTitle>
-          <CardDescription>Select your role to sign in.</CardDescription>
+          <CardTitle>Welcome Back</CardTitle>
+          <CardDescription>Select your role to sign in to your account.</CardDescription>
         </CardHeader>
         <CardContent>
             <Tabs defaultValue="attendee" className="w-full">
@@ -74,5 +78,6 @@ export default function LoginPage() {
         </CardContent>
       </Card>
     </div>
+    </>
   );
 }

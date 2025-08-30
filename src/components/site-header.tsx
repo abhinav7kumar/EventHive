@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -22,15 +23,19 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
+import { usePathname } from 'next/navigation';
 
 const navLinks = [
   { href: '/events', label: 'Events' },
 ];
 
 // Mock user state
-const isLoggedIn = true; 
+const isLoggedIn = false; 
 
 export function SiteHeader() {
+  const pathname = usePathname();
+  const isLoginPage = pathname === '/login';
+
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-14 max-w-screen-2xl items-center">
@@ -80,7 +85,17 @@ export function SiteHeader() {
 
         <div className="flex flex-1 items-center justify-end space-x-2">
           <div className="flex-1" />
-          {isLoggedIn ? (
+          {!isLoggedIn && !isLoginPage && (
+             <div className="flex items-center gap-2">
+                <Link href="/login">
+                  <Button variant="ghost">Login</Button>
+                </Link>
+                <Link href="#">
+                  <Button>Sign Up</Button>
+                </Link>
+             </div>
+          )}
+          {isLoggedIn && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="relative h-8 w-8 rounded-full">
@@ -133,13 +148,6 @@ export function SiteHeader() {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-          ) : (
-            <Link href="/login">
-              <Button>
-                <LogIn className="mr-2 h-4 w-4" />
-                Login
-              </Button>
-            </Link>
           )}
         </div>
       </div>

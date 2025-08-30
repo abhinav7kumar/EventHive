@@ -1,3 +1,4 @@
+
 import type { Event, EventCategory, Attendee, Organizer, Vendor } from '@/types';
 
 const mockEvents: Event[] = [
@@ -11,6 +12,7 @@ const mockEvents: Event[] = [
     location: 'Chandigarh Group of Colleges, Jhanjeri',
     category: 'Technology',
     isFeatured: true,
+    isTrending: true,
     venue: { 
       name: 'Chandigarh Group of Colleges, Jhanjeri', 
       address: 'Chandigarh Group of Colleges, Jhanjeri, Mohali, Punjab',
@@ -38,7 +40,12 @@ const mockEvents: Event[] = [
     location: 'Metropolis Convention Center',
     category: 'Technology',
     isTrending: true,
-    venue: { name: 'Metropolis Convention Center', address: '456 Tech Ave, Metropolis, 90210' },
+    venue: { 
+      name: 'Metropolis Convention Center', 
+      address: '456 Tech Ave, Metropolis, 90210',
+      lat: 34.0522,
+      lng: -118.2437
+    },
     schedule: [
       { time: '09:00', activity: 'Registration & Coffee', details: 'Grab your badge and a coffee to start the day.' },
       { time: '10:00', activity: 'Keynote by Dr. Evelyn Reed', details: 'A look into the future of AI and society.' },
@@ -60,7 +67,12 @@ const mockEvents: Event[] = [
     date: '2024-07-28T12:00:00Z',
     location: 'Harborfront Park, Bayside',
     category: 'Food',
-    venue: { name: 'Harborfront Park', address: '789 Waterfront Rd, Bayside, 33132' },
+    venue: { 
+      name: 'Harborfront Park', 
+      address: '789 Waterfront Rd, Bayside, 33132',
+      lat: 25.7617,
+      lng: -80.1918
+    },
     tickets: [{ id: 't3', name: 'General', price: 120, quantity: 1000, saleStartDate: '2024-05-15', saleEndDate: '2024-07-28' }],
     published: true,
     organizer: 'Gourmet Gatherings',
@@ -75,7 +87,12 @@ const mockEvents: Event[] = [
     date: '2024-10-12T07:00:00Z',
     location: 'Downtown Plaza',
     category: 'Sports',
-    venue: { name: 'Downtown Plaza', address: '1 Main Street, Downtown, 10001' },
+    venue: { 
+      name: 'Downtown Plaza', 
+      address: '1 Main Street, Downtown, 10001',
+      lat: 40.7128,
+      lng: -74.0060
+    },
     tickets: [{ id: 't4', name: 'General', price: 90, quantity: 5000, saleStartDate: '2024-06-01', saleEndDate: '2024-10-10' }],
     published: true,
     organizer: 'City Sports Council',
@@ -92,7 +109,12 @@ const mockEvents: Event[] = [
     category: 'Arts',
     isTrending: true,
     isFeatured: true,
-    venue: { name: 'The Grand Gallery', address: '101 Gallery Row, Art District, 60614' },
+    venue: { 
+      name: 'The Grand Gallery', 
+      address: '101 Gallery Row, Art District, 60614',
+      lat: 41.8781,
+      lng: -87.6298
+    },
     tickets: [{ id: 't5', name: 'General', price: 25, quantity: 1500, saleStartDate: '2024-06-15', saleEndDate: '2024-08-31' }],
     published: true,
     organizer: 'Arts United',
@@ -108,7 +130,12 @@ const mockEvents: Event[] = [
     location: 'Apex Conference Hall',
     category: 'Conference',
     isFeatured: true,
-    venue: { name: 'Apex Conference Hall', address: '202 Summit Peak, Business Bay, 94105' },
+    venue: { 
+      name: 'Apex Conference Hall', 
+      address: '202 Summit Peak, Business Bay, 94105',
+      lat: 37.7749,
+      lng: -122.4194
+    },
     speakers: [{ name: 'Jane Doe', title: 'Founder, TechCorp', avatar: 'https://i.pravatar.cc/150?u=jane' }],
     tickets: [{ id: 't6', name: 'VIP', price: 950, quantity: 200, saleStartDate: '2024-08-01', saleEndDate: '2024-11-01' }],
     published: true,
@@ -131,15 +158,15 @@ const mockOrganizers: Organizer[] = [
 
 const mockVendors: Vendor[] = [
     { id: 'ven-1', companyName: 'Starlight Catering', contactName: 'David Chen', email: 'david@starlight.com', avatar: 'https://i.pravatar.cc/150?u=david', sponsoredEvents: 4, status: 'Active' },
-    { id: 'ven-2', name: 'AV Pro Solutions', email: 'sales@avpro.com', avatar: 'https://i.pravatar.cc/150?u=avpro', sponsoredEvents: 10, status: 'Active' },
-    { id: 'ven-3', name: 'Event Security Services', email: 'contact@ess.com', avatar: 'https://i.pravatar.cc/150?u=ess', sponsoredEvents: 2, status: 'Inactive' },
+    { id: 'ven-2', companyName: 'AV Pro Solutions', contactName: 'Maria Garcia', email: 'sales@avpro.com', avatar: 'https://i.pravatar.cc/150?u=avpro', sponsoredEvents: 10, status: 'Active' },
+    { id: 'ven-3', companyName: 'Event Security Services', contactName: 'Tom Wilson', email: 'contact@ess.com', avatar: 'https://i.pravatar.cc/150?u=ess', sponsoredEvents: 2, status: 'Inactive' },
 ];
 
 export const getEvents = (): Event[] => mockEvents;
 
 export const getEventById = (id: string): Event | undefined => mockEvents.find(event => event.id === id);
 
-export const getFeaturedEvents = (): Event[] => mockEvents.find(event => event.isFeatured);
+export const getFeaturedEvents = (): Event[] => mockEvents.filter(event => event.isFeatured);
 
 export const getTrendingEvents = (): Event[] => mockEvents.filter(event => event.isTrending);
 
