@@ -56,7 +56,7 @@ export default function AttendeeDashboardPage() {
   const handleDownloadPdf = () => {
     if (!ticketRef.current) return;
 
-    html2canvas(ticketRef.current, { scale: 2 }).then((canvas) => {
+    html2canvas(ticketRef.current, { scale: 2, useCORS: true }).then((canvas) => {
         const imgData = canvas.toDataURL('image/png');
         const pdf = new jsPDF({
             orientation: 'portrait',
