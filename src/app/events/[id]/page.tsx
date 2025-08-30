@@ -1,3 +1,7 @@
+
+'use client';
+
+import { useState } from 'react';
 import { getEventById } from '@/lib/mock-data';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
@@ -18,10 +22,26 @@ import Link from 'next/link';
 
 export default function EventDetailPage({ params }: { params: { id: string } }) {
   const event = getEventById(params.id);
+  const [ticketQuantities, setTicketQuantities] = useState<Record<string, number>>({});
 
   if (!event) {
     notFound();
   }
+  
+  const handleQuantityChange = (ticketId: string, amount: number) => {
+    setTicketQuantities(prev => {
+      const currentQuantity = prev[ticketId] || 1;
+      const newQuantity = Math.max(1, Math.min(4, currentQuantity + amount));
+      return { ...prev, [ticketId]: newQuantity };
+    });
+  };
+  
+  const calculateTotal = () => {
+    return event.tickets.reduce((total, ticket) => {
+      const quantity = ticketQuantities[ticket.id] || 1;
+      return total + (ticket.price * quantity);
+    }, 0);
+  };
 
   const gmapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(event.venue.address)}`;
 
@@ -162,23 +182,26 @@ export default function EventDetailPage({ params }: { params: { id: string } }) 
                     </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                   {event.tickets.map(ticket => (
-                    <div key={ticket.id} className="flex justify-between items-center p-3 rounded-lg border">
-                        <div>
-                            <p className="font-semibold">{ticket.name}</p>
-                            <p className="text-sm font-bold text-primary">₹{ticket.price.toFixed(2)}</p>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <Button variant="outline" size="icon" className="h-8 w-8"><Minus className="h-4 w-4"/></Button>
-                            <span className="font-bold w-4 text-center">1</span>
-                             <Button variant="outline" size="icon" className="h-8 w-8"><Plus className="h-4 w-4"/></Button>
-                        </div>
-                    </div>
-                   ))}
+                   {event.tickets.map(ticket => {
+                    const quantity = ticketQuantities[ticket.id] || 1;
+                    return(
+                      <div key={ticket.id} className="flex justify-between items-center p-3 rounded-lg border">
+                          <div>
+                              <p className="font-semibold">{ticket.name}</p>
+                              <p className="text-sm font-bold text-primary">₹{ticket.price.toFixed(2)}</p>
+                          </div>
+                          <div className="flex items-center gap-2">
+                              <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => handleQuantityChange(ticket.id, -1)} disabled={quantity <= 1}><Minus className="h-4 w-4"/></Button>
+                              <span className="font-bold w-4 text-center">{quantity}</span>
+                              <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => handleQuantityChange(ticket.id, 1)} disabled={quantity >= 4}><Plus className="h-4 w-4"/></Button>
+                          </div>
+                      </div>
+                    )
+                   })}
                    <Separator/>
                    <div className="flex justify-between font-bold text-lg">
                     <p>Total</p>
-                    <p>₹{event.tickets[0].price.toFixed(2)}</p>
+                    <p>₹{calculateTotal().toFixed(2)}</p>
                    </div>
                    <Link href={event.externalLink} className="w-full">
                     <Button className="w-full" size="lg">Register Now</Button>
