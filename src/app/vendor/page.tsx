@@ -7,7 +7,6 @@ import Link from "next/link";
 export default function VendorDashboardPage() {
   const sponsoredEvents = [
     { id: '1', title: 'Oddo X CGC Hackathon', status: 'Active' },
-    { id: '2', title: 'AI & The Future of Tech', status: 'Upcoming' },
   ];
 
   return (
