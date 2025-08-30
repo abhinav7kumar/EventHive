@@ -29,7 +29,9 @@ export default function RootLayout({
         <EventProvider>
           <CouponProvider>
             <ReferralProvider>
-              {children}
+              <SiteHeader />
+              <main className="flex-1">{children}</main>
+              <Footer />
               <Toaster />
             </ReferralProvider>
           </CouponProvider>
