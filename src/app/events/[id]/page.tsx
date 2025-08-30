@@ -50,11 +50,8 @@ export default function EventDetailPage({ params }: { params: { id: string } }) 
     }, 0);
   };
 
-  const mapQuery = (event.venue.lat && event.venue.lng) 
-    ? `${event.venue.lat},${event.venue.lng}`
-    : encodeURIComponent(event.venue.address);
-    
-  const gmapsUrl = `https://www.google.com/maps/search/?api=1&query=${mapQuery}`;
+  const osmUrl = `https://www.openstreetmap.org/?mlat=${event.venue.lat}&mlon=${event.venue.lng}#map=16/${event.venue.lat}/${event.venue.lng}`;
+  const osmEmbedUrl = `https://www.openstreetmap.org/export/embed.html?bbox=${event.venue.lng - 0.01}%2C${event.venue.lat - 0.01}%2C${event.venue.lng + 0.01}%2C${event.venue.lat + 0.01}&layer=mapnik&marker=${event.venue.lat}%2C${event.venue.lng}`;
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -145,12 +142,12 @@ export default function EventDetailPage({ params }: { params: { id: string } }) 
                         style={{ border: 0 }}
                         loading="lazy"
                         allowFullScreen
-                        src={`https://www.google.com/maps/embed/v1/place?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&q=${mapQuery}`}>
+                        src={osmEmbedUrl}>
                     </iframe>
                 </div>
-                 <a href={gmapsUrl} target="_blank" rel="noopener noreferrer" className="mt-4">
+                 <a href={osmUrl} target="_blank" rel="noopener noreferrer" className="mt-4">
                     <Button variant="outline" className="w-full">
-                        <ExternalLink className="mr-2 h-4 w-4"/> View on Google Maps
+                        <ExternalLink className="mr-2 h-4 w-4"/> View on OpenStreetMap
                     </Button>
                 </a>
             </CardContent>
