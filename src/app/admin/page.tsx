@@ -15,17 +15,12 @@ export default function AdminDashboardPage() {
         <div className="flex justify-between items-start mb-8">
           <div>
             <h1 className="text-3xl font-bold">Admin Dashboard</h1>
-            <p className="text-muted-foreground">Welcome back, Admin. Here's what's happening.</p>
+            <p className="text-muted-foreground">Platform Governance & Compliance Center</p>
           </div>
           <div className="flex gap-2">
               <Button variant="outline">
-                  <Megaphone className="mr-2 h-4 w-4" /> Send Announcement
+                  <Megaphone className="mr-2 h-4 w-4" /> Send Platform Alert
               </Button>
-              <Link href="/create-event">
-                  <Button>
-                      <PlusCircle className="mr-2 h-4 w-4" /> Create New Event
-                  </Button>
-              </Link>
           </div>
         </div>
 
@@ -33,42 +28,42 @@ export default function AdminDashboardPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
+                    <CardTitle className="text-sm font-medium">Overall Revenue</CardTitle>
                     <DollarSign className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
-                    <div className="text-2xl font-bold">$45,231.89</div>
-                    <p className="text-xs text-muted-foreground">+20.1% from last month</p>
+                    <div className="text-2xl font-bold">$1,245,231.89</div>
+                    <p className="text-xs text-muted-foreground">Total platform earnings</p>
                 </CardContent>
             </Card>
              <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">Tickets Sold</CardTitle>
+                    <CardTitle className="text-sm font-medium">Global Tickets Sold</CardTitle>
                     <Ticket className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
-                    <div className="text-2xl font-bold">+2350</div>
-                     <p className="text-xs text-muted-foreground">+180.1% from last month</p>
+                    <div className="text-2xl font-bold">+12,234</div>
+                     <p className="text-xs text-muted-foreground">Across all events</p>
                 </CardContent>
             </Card>
              <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">Active Events</CardTitle>
+                    <CardTitle className="text-sm font-medium">Active Attendees Today</CardTitle>
                     <Activity className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
-                    <div className="text-2xl font-bold">+57</div>
-                    <p className="text-xs text-muted-foreground">+12 since last week</p>
+                    <div className="text-2xl font-bold">+8,432</div>
+                    <p className="text-xs text-muted-foreground">Live event check-ins</p>
                 </CardContent>
             </Card>
              <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">New Users</CardTitle>
+                    <CardTitle className="text-sm font-medium">Platform Growth</CardTitle>
                     <Users className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
-                    <div className="text-2xl font-bold">+128</div>
-                    <p className="text-xs text-muted-foreground">+32 this week</p>
+                    <div className="text-2xl font-bold">+512</div>
+                    <p className="text-xs text-muted-foreground">New users this week</p>
                 </CardContent>
             </Card>
         </div>
@@ -78,8 +73,8 @@ export default function AdminDashboardPage() {
             <div className="lg:col-span-2 space-y-8">
                 <Card>
                     <CardHeader>
-                        <CardTitle>Event Approval Queue</CardTitle>
-                        <CardDescription>Review and approve new events waiting for verification.</CardDescription>
+                        <CardTitle>Event Management</CardTitle>
+                        <CardDescription>Approve or reject events before they go live.</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
                         {pendingEvents.map(event => (
@@ -105,16 +100,16 @@ export default function AdminDashboardPage() {
 
                  <Card>
                     <CardHeader>
-                        <CardTitle>
-                            <span className="flex items-center gap-2">
-                                <BarChart2 /> Analytics & Reports
-                            </span>
-                        </CardTitle>
-                         <CardDescription>Get insights on platform performance and user engagement.</CardDescription>
+                      <CardTitle>
+                          <span className="flex items-center gap-2">
+                              <BarChart2 /> Analytics & Reports
+                          </span>
+                      </CardTitle>
+                       <CardDescription>Global insights on ticket sales, engagement, and revenue.</CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <p className="text-muted-foreground mb-4">Detailed charts and reports will be displayed here.</p>
-                        <Button variant="outline" className="w-full">View Full Analytics</Button>
+                        <p className="text-muted-foreground mb-4">High-level reports on platform performance will be shown here.</p>
+                        <Button variant="outline" className="w-full">View Global Analytics</Button>
                     </CardContent>
                 </Card>
             </div>
@@ -128,12 +123,12 @@ export default function AdminDashboardPage() {
                             <Users /> User Management
                         </span>
                     </CardTitle>
-                    <CardDescription>Oversee all platform users.</CardDescription>
+                    <CardDescription>Manage organizers, attendees, and vendors.</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-2">
-                    <Button variant="outline" className="w-full justify-start">View Attendees</Button>
+                    <Button variant="outline" className="w-full justify-start">Manage Attendees</Button>
                     <Button variant="outline" className="w-full justify-start">Manage Organizers</Button>
-                    <Button variant="outline" className="w-full justify-start">Handle Vendors</Button>
+                    <Button variant="outline" className="w-full justify-start">Manage Vendors</Button>
                   </CardContent>
                 </Card>
 
@@ -141,14 +136,15 @@ export default function AdminDashboardPage() {
                     <CardHeader>
                         <CardTitle>
                             <span className="flex items-center gap-2">
-                                <CreditCard /> Payment & Finance
+                                <CreditCard /> Payment & Finance Control
                             </span>
                         </CardTitle>
-                        <CardDescription>Monitor all financial activities.</CardDescription>
+                        <CardDescription>Oversee transactions, refunds, and settlements.</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-2">
-                        <Button variant="outline" className="w-full justify-start">View Transactions</Button>
-                        <Button variant="outline" className="w-full justify-start">Process Refunds</Button>
+                        <Button variant="outline" className="w-full justify-start">View All Transactions</Button>
+                        <Button variant="outline" className="w-full justify-start">Manage Refunds</Button>
+                        <Button variant="outline" className="w-full justify-start">Track Settlements</Button>
                     </CardContent>
                 </Card>
 
@@ -156,15 +152,15 @@ export default function AdminDashboardPage() {
                   <CardHeader>
                     <CardTitle>
                         <span className="flex items-center gap-2">
-                            <Settings /> System & Security
+                            <Settings /> System Rules & Settings
                         </span>
                     </CardTitle>
-                     <CardDescription>Configure settings and monitor security.</CardDescription>
+                     <CardDescription>Configure platform-wide policies and permissions.</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-2">
-                     <Button variant="outline" className="w-full justify-start">Manage Permissions</Button>
-                     <Button variant="outline" className="w-full justify-start">Set Refund Policies</Button>
-                     <Button variant="outline" className="w-full justify-start"><ShieldCheck className="mr-2"/>Security Logs</Button>
+                     <Button variant="outline" className="w-full justify-start">Role-Based Permissions</Button>
+                     <Button variant="outline" className="w-full justify-start">Configure Refund Workflows</Button>
+                     <Button variant="outline" className="w-full justify-start"><ShieldCheck className="mr-2"/>Fraud & Security</Button>
                   </CardContent>
                 </Card>
             </div>
