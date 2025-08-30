@@ -6,7 +6,7 @@ const mockEvents: Event[] = [
     title: 'Odoo x CGC Mohali Hackathon 2025',
     shortDescription: 'A two-day hackathon for developers, designers, and entrepreneurs.',
     description: 'Join us for the 3rd annual odooXcgc Hackathon, bringing together visionary developers, designers, and entrepreneurs. Experience two days of rapid coding, creative challenges, and collaboration in the dynamic Innovation Valley hub, with expert mentorship, startup demos, and transformative networking opportunities.',
-    image: 'https://picsum.photos/seed/odoo-hackathon/1200/800',
+    image: 'https://picsum.photos/seed/hackathon-event/1200/800',
     date: '2025-08-30T18:00:00Z',
     location: 'Chandigarh Group of Colleges, Jhanjeri',
     category: 'Technology',
