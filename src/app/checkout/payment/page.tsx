@@ -7,7 +7,7 @@ import Image from 'next/image';
 import { getEventById } from '@/lib/mock-data';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, Loader2, Info } from 'lucide-react';
+import { ArrowLeft, Loader2, Info, Laptop, Smartphone } from 'lucide-react';
 import Link from 'next/link';
 import { SiteHeader } from '@/components/site-header';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -40,7 +40,7 @@ function usePaymentStatus(transactionId: string) {
 }
 
 
-function PaymentQRCode() {
+function PaymentFlow() {
   const router = useRouter();
   const searchParams = useSearchParams();
   
@@ -81,12 +81,11 @@ function PaymentQRCode() {
   const processingFee = subtotal * 0.05;
   const total = subtotal + processingFee;
   
-  // Use the provided local IP address for testing.
-  // Your computer and phone must be on the same Wi-Fi network.
-  const localIpAddress = "10.110.1.44"; 
-  const port = "9002";
-  const mobilePaymentUrl = `http://${localIpAddress}:${port}/checkout/pay-mobile?transactionId=${transactionId}&eventId=${eventId}&total=${total.toFixed(2)}`;
-  const encodedQrData = encodeURIComponent(mobilePaymentUrl);
+  const mobilePaymentUrl = `/checkout/pay-mobile?transactionId=${transactionId}&eventId=${eventId}&total=${total.toFixed(2)}`;
+
+  const handleSimulatePayment = () => {
+    window.open(mobilePaymentUrl, '_blank', 'noopener,noreferrer');
+  }
 
 
   return (
@@ -100,18 +99,22 @@ function PaymentQRCode() {
           </Link>
         <Card>
           <CardHeader className="text-center">
-            <CardTitle>Scan to Pay</CardTitle>
-            <CardDescription>Use your mobile phone's camera to scan the QR code and complete the payment.</CardDescription>
+            <CardTitle>Complete Your Payment</CardTitle>
+            <CardDescription>Click the button below to open the payment screen and finalize your purchase.</CardDescription>
           </CardHeader>
           <CardContent className="flex flex-col items-center justify-center space-y-6">
-            <div className="p-4 border rounded-lg bg-white">
-                 <Image
-                    src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodedQrData}`}
-                    alt="Payment QR Code"
-                    width={250}
-                    height={250}
-                    data-ai-hint="qr code"
-                />
+            <div className="p-4 border rounded-lg bg-white flex flex-col items-center gap-4">
+                <div className="flex items-center text-muted-foreground">
+                    <Laptop className="h-8 w-8 mr-4"/>
+                    <div className="h-px w-24 bg-border"/>
+                    <Smartphone className="h-8 w-8 ml-4"/>
+                </div>
+                 <Button size="lg" onClick={handleSimulatePayment}>
+                    Simulate Mobile Payment
+                </Button>
+                 <p className="text-xs text-muted-foreground text-center max-w-xs">
+                    This will open the payment confirmation page in a new tab.
+                </p>
             </div>
             <div className="flex items-center space-x-2 text-muted-foreground animate-pulse">
                 <Loader2 className="h-5 w-5 animate-spin" />
@@ -127,7 +130,7 @@ function PaymentQRCode() {
 export default function PaymentPage() {
     return (
         <Suspense fallback={<div>Loading...</div>}>
-            <PaymentQRCode />
+            <PaymentFlow />
         </Suspense>
     )
 }
