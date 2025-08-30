@@ -69,7 +69,7 @@ export default function AttendeeDashboardPage() {
                     resolve(true);
                 } else {
                     img.onload = () => resolve(true);
-                    img.onerror = reject;
+                    img.onerror = () => reject(new Error(`Failed to load image: ${img.src}`));
                 }
             });
         });
@@ -78,6 +78,7 @@ export default function AttendeeDashboardPage() {
 
     try {
         await waitForImages(ticketElement);
+        // A small delay to ensure rendering is complete after images load
         await new Promise(resolve => setTimeout(resolve, 200));
 
         const canvas = await html2canvas(ticketElement, {

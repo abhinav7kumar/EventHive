@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { Suspense, useRef, useState } from 'react';
@@ -51,7 +52,7 @@ function Confirmation() {
                     if (img.complete && img.naturalHeight !== 0) resolve(true);
                     else {
                         img.onload = () => resolve(true);
-                        img.onerror = reject;
+                        img.onerror = () => reject(new Error(`Failed to load image: ${img.src}`));
                     }
                 });
             });
