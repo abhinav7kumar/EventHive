@@ -178,9 +178,15 @@ export default function AdminDashboardPage() {
                      <CardDescription>Configure platform-wide policies and permissions.</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-2">
-                     <Button variant="outline" className="w-full justify-start">Role-Based Permissions</Button>
-                     <Button variant="outline" className="w-full justify-start">Configure Refund Workflows</Button>
-                     <Button variant="outline" className="w-full justify-start"><ShieldCheck className="mr-2"/>Fraud & Security</Button>
+                    <Link href="/admin/settings/permissions" className="w-full">
+                        <Button variant="outline" className="w-full justify-start">Role-Based Permissions</Button>
+                    </Link>
+                    <Link href="/admin/settings/refunds" className="w-full">
+                        <Button variant="outline" className="w-full justify-start">Configure Refund Workflows</Button>
+                    </Link>
+                    <Link href="/admin/settings/security" className="w-full">
+                        <Button variant="outline" className="w-full justify-start"><ShieldCheck className="mr-2"/>Fraud & Security</Button>
+                    </Link>
                   </CardContent>
                 </Card>
             </div>
