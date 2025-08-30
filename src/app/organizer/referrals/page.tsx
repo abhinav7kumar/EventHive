@@ -4,7 +4,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, Gift, Percent, Users } from "lucide-react";
+import { ArrowLeft, Gift, Percent, Users, Share2 } from "lucide-react";
 import Link from "next/link";
 import {
   Select,
@@ -67,6 +67,19 @@ export default function ManageReferralsPage() {
         setSelectedEventId('');
         setFriendDiscount('');
         setAdvocateReward('');
+    };
+
+    const handleShare = (program: ReferralProgram) => {
+        const event = getEventById(program.eventId);
+        if (!event) return;
+
+        const referralLink = `${window.location.origin}/events/${program.eventId}?ref=${program.id}`;
+        
+        const message = `Hey! Check out this event: "${event.title}". Use my referral to get ${program.friendDiscount}% off your ticket! ${referralLink}`;
+        
+        const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
+        
+        window.open(whatsappUrl, '_blank');
     };
 
   return (
@@ -149,6 +162,7 @@ export default function ManageReferralsPage() {
                                         <TableHead>Event</TableHead>
                                         <TableHead>Friend's Discount</TableHead>
                                         <TableHead>Advocate's Reward</TableHead>
+                                        <TableHead className="text-right">Share</TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
@@ -159,6 +173,11 @@ export default function ManageReferralsPage() {
                                                 <TableCell className="font-medium">{event ? event.title : 'Unknown Event'}</TableCell>
                                                 <TableCell className="font-semibold text-primary">{program.friendDiscount}%</TableCell>
                                                 <TableCell className="font-semibold text-primary">{program.advocateReward}%</TableCell>
+                                                <TableCell className="text-right">
+                                                    <Button variant="ghost" size="icon" onClick={() => handleShare(program)}>
+                                                        <Share2 className="h-4 w-4"/>
+                                                    </Button>
+                                                </TableCell>
                                             </TableRow>
                                         )
                                     })}
