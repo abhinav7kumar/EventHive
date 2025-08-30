@@ -1,3 +1,7 @@
+
+'use client';
+
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getEvents } from "@/lib/mock-data";
@@ -12,9 +16,54 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogTrigger } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useCoupons } from "@/context/CouponContext";
+import { useToast } from "@/hooks/use-toast";
 
 export default function OrganizerDashboardPage() {
     const myEvents = getEvents().slice(0, 3); // Mock data for organizer's events
+    const { addCoupon } = useCoupons();
+    const { toast } = useToast();
+
+    const [isCouponDialogOpen, setIsCouponDialogOpen] = useState(false);
+    const [couponCode, setCouponCode] = useState('');
+    const [discount, setDiscount] = useState('');
+    const [selectedEventId, setSelectedEventId] = useState('');
+
+
+    const handleCreateCoupon = () => {
+        if (!couponCode || !discount || !selectedEventId) {
+            toast({
+                title: "Error",
+                description: "Please fill out all coupon details.",
+                variant: "destructive",
+            });
+            return;
+        }
+
+        const newCoupon = {
+            id: `coupon-${Date.now()}`,
+            code: couponCode,
+            discount: parseInt(discount, 10),
+            eventId: selectedEventId,
+        };
+
+        addCoupon(newCoupon);
+
+        toast({
+            title: "Coupon Created!",
+            description: `Code "${couponCode}" for ${discount}% off has been activated.`,
+        });
+
+        // Reset and close
+        setCouponCode('');
+        setDiscount('');
+        setSelectedEventId('');
+        setIsCouponDialogOpen(false);
+    };
 
     return (
         <div className="bg-muted/40 min-h-screen">
@@ -140,7 +189,45 @@ export default function OrganizerDashboardPage() {
                             <CardDescription>Boost sales with special offers.</CardDescription>
                           </CardHeader>
                           <CardContent className="space-y-2">
-                            <Button variant="outline" className="w-full justify-start">Create Coupon</Button>
+                             <Dialog open={isCouponDialogOpen} onOpenChange={setIsCouponDialogOpen}>
+                                <DialogTrigger asChild>
+                                    <Button variant="outline" className="w-full justify-start">Create Coupon</Button>
+                                </DialogTrigger>
+                                <DialogContent>
+                                    <DialogHeader>
+                                        <DialogTitle>Create New Coupon</DialogTitle>
+                                        <DialogDescription>
+                                            Create a discount code for a specific event to drive sales.
+                                        </DialogDescription>
+                                    </DialogHeader>
+                                    <div className="grid gap-4 py-4">
+                                        <div className="grid grid-cols-4 items-center gap-4">
+                                            <Label htmlFor="code" className="text-right">Code</Label>
+                                            <Input id="code" value={couponCode} onChange={(e) => setCouponCode(e.target.value.toUpperCase())} className="col-span-3" placeholder="e.g., SUMMER20"/>
+                                        </div>
+                                        <div className="grid grid-cols-4 items-center gap-4">
+                                            <Label htmlFor="discount" className="text-right">Discount (%)</Label>
+                                            <Input id="discount" type="number" value={discount} onChange={(e) => setDiscount(e.target.value)} className="col-span-3" placeholder="e.g., 20" />
+                                        </div>
+                                        <div className="grid grid-cols-4 items-center gap-4">
+                                            <Label htmlFor="event" className="text-right">Event</Label>
+                                            <Select onValueChange={setSelectedEventId} value={selectedEventId}>
+                                                <SelectTrigger className="col-span-3">
+                                                    <SelectValue placeholder="Select an event" />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    {myEvents.map(event => (
+                                                        <SelectItem key={event.id} value={event.id}>{event.title}</SelectItem>
+                                                    ))}
+                                                </SelectContent>
+                                            </Select>
+                                        </div>
+                                    </div>
+                                    <DialogFooter>
+                                        <Button type="submit" onClick={handleCreateCoupon}>Create Coupon</Button>
+                                    </DialogFooter>
+                                </DialogContent>
+                            </Dialog>
                             <Button variant="outline" className="w-full justify-start">Manage Discounts</Button>
                             <Button variant="outline" className="w-full justify-start">Referral Rewards</Button>
                           </CardContent>
@@ -172,4 +259,5 @@ export default function OrganizerDashboardPage() {
             </div>
         </div>
     );
-}
+
+    
