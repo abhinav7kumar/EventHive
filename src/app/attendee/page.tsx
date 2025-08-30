@@ -26,7 +26,7 @@ const bookedTickets = [
 ];
 
 const communityGroups = [
-    { eventId: '1', eventName: 'Odoo X CGC', members: 3, description: 'Connect with fellow hackathon lovers!' },
+    { eventId: '1', eventName: 'Odoo X CGC', members: 3, description: 'Connect with fellow hackathon lovers!', link: 'https://chat.whatsapp.com/GE4pWuwBLm10kRzDlDW848?mode=ems_copy_t' },
     { eventId: '2', eventName: 'AI & The Future of Tech', members: 450, description: 'Discuss the latest in AI.' }
 ]
 
@@ -177,7 +177,13 @@ export default function AttendeeDashboardPage() {
                                               {group.members} members
                                           </div>
                                       </div>
-                                      <Button>Join Group</Button>
+                                      {group.link ? (
+                                        <Link href={group.link} target="_blank" rel="noopener noreferrer">
+                                            <Button>Join Group</Button>
+                                        </Link>
+                                      ) : (
+                                        <Button>Join Group</Button>
+                                      )}
                                   </div>
                               ))}
                           </CardContent>
