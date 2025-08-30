@@ -20,6 +20,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
+import { SiteHeader } from '@/components/site-header';
 
 export default function EventDetailPage({ params }: { params: { id: string } }) {
   const event = getEventById(params.id);
@@ -53,17 +54,17 @@ export default function EventDetailPage({ params }: { params: { id: string } }) 
   };
 
   const handleShare = () => {
-    const url = window.location.href;
-    navigator.clipboard.writeText(url).then(() => {
+    const eventInfo = `Event: ${event.title}\nDate: ${formattedDate}\nLocation: ${event.location}`;
+    navigator.clipboard.writeText(eventInfo).then(() => {
       toast({
-        title: 'Link Copied!',
-        description: 'The event link has been copied to your clipboard.',
+        title: 'Event Info Copied!',
+        description: 'The event details have been copied to your clipboard.',
       });
     }).catch(err => {
       console.error('Failed to copy text: ', err);
       toast({
         title: 'Error',
-        description: 'Could not copy the link.',
+        description: 'Could not copy the event info.',
         variant: 'destructive',
       });
     });
@@ -73,6 +74,8 @@ export default function EventDetailPage({ params }: { params: { id: string } }) 
   const osmEmbedUrl = `https://www.openstreetmap.org/export/embed.html?bbox=${event.venue.lng - 0.01}%2C${event.venue.lat - 0.01}%2C${event.venue.lng + 0.01}%2C${event.venue.lat + 0.01}&layer=mapnik&marker=${event.venue.lat}%2C${event.venue.lng}`;
 
   return (
+    <>
+    <SiteHeader />
     <div className="container mx-auto px-4 py-8">
       {/* Hero Section */}
       <div className="relative w-full h-[40vh] md:h-[60vh] rounded-lg overflow-hidden shadow-lg mb-8">
@@ -276,5 +279,6 @@ export default function EventDetailPage({ params }: { params: { id: string } }) 
         </div>
       </div>
     </div>
+    </>
   );
 }
