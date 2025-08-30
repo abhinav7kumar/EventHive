@@ -1,21 +1,30 @@
 
 'use client';
 
-import { Suspense } from 'react';
-import { useSearchParams, notFound } from 'next/navigation';
+import { Suspense, useEffect, useState } from 'react';
+import { useSearchParams, notFound, useRouter } from 'next/navigation';
 import { getEventById } from '@/lib/mock-data';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { CheckCircle, Zap } from 'lucide-react';
-import { useState } from 'react';
+import { CheckCircle, Zap, Loader2 } from 'lucide-react';
 
 function MobilePayment() {
     const searchParams = useSearchParams();
+    const router = useRouter();
     const transactionId = searchParams.get('transactionId');
     const eventId = searchParams.get('eventId');
     const total = searchParams.get('total');
     
     const [isPaid, setIsPaid] = useState(false);
+
+    useEffect(() => {
+        if (isPaid) {
+            const timer = setTimeout(() => {
+                router.push(`/checkout/confirmation?eventId=${eventId}&total=${total}`);
+            }, 3000); // 3-second delay
+            return () => clearTimeout(timer);
+        }
+    }, [isPaid, router, eventId, total]);
 
     if (!transactionId || !eventId || !total) {
         return notFound();
@@ -39,11 +48,15 @@ function MobilePayment() {
 
     if (isPaid) {
         return (
-            <div className="flex flex-col items-center justify-center min-h-screen bg-green-50 text-green-800 p-4">
-                <CheckCircle className="h-24 w-24 mb-4 text-green-500" />
-                <h1 className="text-3xl font-bold">Payment Successful!</h1>
-                <p className="mt-2 text-center">Your ticket purchase is confirmed.</p>
-                <p className="mt-4 text-sm text-center">You can now return to your desktop to view your ticket.</p>
+            <div className="flex flex-col items-center justify-center min-h-screen bg-background p-4 text-center">
+                <div className="animate-fade-in animate-bounce">
+                    <CheckCircle className="h-24 w-24 mb-4 text-green-500" />
+                </div>
+                <h1 className="text-3xl font-bold text-green-600 animate-fade-in">Payment Successful!</h1>
+                <p className="mt-4 text-muted-foreground flex items-center gap-2 animate-fade-in">
+                    <Loader2 className="animate-spin h-5 w-5"/>
+                    Redirecting to your confirmation...
+                </p>
             </div>
         )
     }
