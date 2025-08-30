@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getEventById } from '@/lib/mock-data';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
@@ -23,6 +23,13 @@ import Link from 'next/link';
 export default function EventDetailPage({ params }: { params: { id: string } }) {
   const event = getEventById(params.id);
   const [ticketQuantities, setTicketQuantities] = useState<Record<string, number>>({});
+  const [formattedDate, setFormattedDate] = useState('');
+
+  useEffect(() => {
+    if (event) {
+      setFormattedDate(format(new Date(event.date), 'PPPP p'));
+    }
+  }, [event]);
 
   if (!event) {
     notFound();
@@ -215,7 +222,7 @@ export default function EventDetailPage({ params }: { params: { id: string } }) 
                         <Calendar className="h-5 w-5 mt-1 text-primary"/>
                         <div>
                             <p className="font-semibold">Date & Time</p>
-                            <p className="text-muted-foreground">{format(new Date(event.date), 'PPPP p')}</p>
+                            <p className="text-muted-foreground">{formattedDate || 'Loading...'}</p>
                         </div>
                     </div>
                      <div className="flex items-start gap-4">
