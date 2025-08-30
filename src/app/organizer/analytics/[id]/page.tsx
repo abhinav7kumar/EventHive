@@ -12,13 +12,13 @@ import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/
 
 
 const salesData = [
-  { date: '2024-07-01', tickets: 50 },
-  { date: '2024-07-02', tickets: 75 },
-  { date: '2024-07-03', tickets: 60 },
-  { date: '2024-07-04', tickets: 120 },
-  { date: '2024-07-05', tickets: 90 },
-  { date: '2024-07-06', tickets: 150 },
-  { date: '2024-07-07', tickets: 130 },
+  { date: '2024-08-24', tickets: 50 },
+  { date: '2024-08-25', tickets: 75 },
+  { date: '2024-08-26', tickets: 60 },
+  { date: '2024-08-27', tickets: 120 },
+  { date: '2024-08-28', tickets: 90 },
+  { date: '2024-08-29', tickets: 150 },
+  { date: '2024-08-30', tickets: 130 },
 ];
 
 const chartConfig = {
