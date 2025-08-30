@@ -2,7 +2,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { Footer } from '@/components/footer';
-import { SiteHeader } from '@/components/site-header';
 import { Toaster } from '@/components/ui/toaster';
 import { EventProvider } from '@/context/EventContext';
 import { CouponProvider } from '@/context/CouponContext';
@@ -29,7 +28,6 @@ export default function RootLayout({
         <EventProvider>
           <CouponProvider>
             <ReferralProvider>
-              <SiteHeader />
               <main className="flex-1">{children}</main>
               <Footer />
               <Toaster />

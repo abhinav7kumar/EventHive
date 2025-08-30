@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { Button } from "@/components/ui/button";
@@ -16,6 +17,7 @@ import Image from "next/image";
 import html2canvas from 'html2canvas';
 import { TicketStub } from "@/components/ticket-stub";
 import Link from "next/link";
+import { SiteHeader } from "@/components/site-header";
 
 const bookedTickets = [
     { id: '1', title: 'Odoo X CGC Mohali Hackathon 2025', date: 'Aug 30, 2025', location: 'Mohali, Punjab', quantity: 4 },
@@ -101,6 +103,7 @@ export default function AttendeeDashboardPage() {
 
   return (
     <>
+      <SiteHeader />
       <div className="container mx-auto px-4 py-12">
         <h1 className="text-3xl font-bold mb-8">Attendee Dashboard</h1>
 
