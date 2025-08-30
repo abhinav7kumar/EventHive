@@ -26,7 +26,7 @@ const bookedTickets = [
 ];
 
 const communityGroups = [
-    { eventId: '1', eventName: 'Odoo X CGC', members: 128, description: 'Connect with fellow hackathon lovers!' },
+    { eventId: '1', eventName: 'Odoo X CGC', members: 3, description: 'Connect with fellow hackathon lovers!' },
     { eventId: '2', eventName: 'AI & The Future of Tech', members: 450, description: 'Discuss the latest in AI.' }
 ]
 
