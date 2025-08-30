@@ -7,6 +7,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { useToast } from '@/hooks/use-toast';
 import { Camera, QrCode, Ticket, UserCheck, UserX, Frown } from 'lucide-react';
 import Link from 'next/link';
+import jsQR from 'jsqr';
 
 type ScanStatus = 'waiting' | 'success' | 'failure' | 'duplicate';
 
@@ -22,7 +23,9 @@ export default function CheckInScannerPage() {
   const [scanStatus, setScanStatus] = useState<ScanStatus>('waiting');
   const [scannedData, setScannedData] = useState<{name: string, status: string} | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const { toast } = useToast();
+  const [isScanning, setIsScanning] = useState(true);
 
   useEffect(() => {
     const getCameraPermission = async () => {
@@ -38,7 +41,7 @@ export default function CheckInScannerPage() {
       }
 
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
         setHasCameraPermission(true);
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
@@ -65,20 +68,84 @@ export default function CheckInScannerPage() {
     };
   }, [toast]);
 
-  // Simulate scanning
-  const handleMockScan = (result: ScanStatus) => {
-    setScanStatus(result);
-    if(result === 'success') {
-      setScannedData({name: 'John Doe', status: 'Checked-In'});
-    } else if (result === 'duplicate') {
-      setScannedData({name: 'Jane Smith', status: 'Already Checked-In'});
-    } else {
-       setScannedData({name: 'Unknown Ticket', status: 'Invalid'});
+  useEffect(() => {
+    let animationFrameId: number;
+
+    const tick = () => {
+        if (videoRef.current && videoRef.current.readyState === videoRef.current.HAVE_ENOUGH_DATA && canvasRef.current && isScanning) {
+            const video = videoRef.current;
+            const canvas = canvasRef.current;
+            const context = canvas.getContext('2d');
+
+            if (context) {
+                canvas.height = video.videoHeight;
+                canvas.width = video.videoWidth;
+                context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+                const code = jsQR(imageData.data, imageData.width, imageData.height, {
+                    inversionAttempts: 'dontInvert',
+                });
+
+                if (code) {
+                    setIsScanning(false);
+                    handleScanResult(code.data);
+                }
+            }
+        }
+        animationFrameId = requestAnimationFrame(tick);
+    };
+
+    if (hasCameraPermission) {
+        animationFrameId = requestAnimationFrame(tick);
+    }
+
+    return () => {
+        cancelAnimationFrame(animationFrameId);
+    };
+  }, [hasCameraPermission, isScanning]);
+
+
+  const handleScanResult = (data: string) => {
+    try {
+        const parsedData = JSON.parse(data);
+        const ticketId = parsedData.ticketId;
+        
+        if (MOCK_TICKET_DB[ticketId]) {
+            const ticket = MOCK_TICKET_DB[ticketId];
+            if (ticket.status === 'valid') {
+                MOCK_TICKET_DB[ticketId].status = 'checked-in';
+                setScanStatus('success');
+                setScannedData({ name: ticket.name, status: 'Checked-In' });
+            } else {
+                setScanStatus('duplicate');
+                setScannedData({ name: ticket.name, status: 'Already Checked-In' });
+            }
+        } else {
+            setScanStatus('failure');
+            setScannedData({ name: 'Unknown Ticket', status: 'Invalid' });
+        }
+    } catch(e) {
+        // Fallback for simple string QR codes
+        if(MOCK_TICKET_DB[data]) {
+            const ticket = MOCK_TICKET_DB[data];
+            if (ticket.status === 'valid') {
+                MOCK_TICKET_DB[data].status = 'checked-in';
+                setScanStatus('success');
+                setScannedData({ name: ticket.name, status: 'Checked-In' });
+            } else {
+                setScanStatus('duplicate');
+                setScannedData({ name: ticket.name, status: 'Already Checked-In' });
+            }
+        } else {
+            setScanStatus('failure');
+            setScannedData({name: 'Invalid QR Code', status: 'Not recognized'});
+        }
     }
 
     setTimeout(() => {
         setScanStatus('waiting');
         setScannedData(null);
+        setIsScanning(true);
     }, 4000);
   };
 
@@ -135,6 +202,7 @@ export default function CheckInScannerPage() {
         <CardContent className="space-y-6">
           <div className="aspect-video w-full bg-slate-900 rounded-lg overflow-hidden relative border">
             <video ref={videoRef} className="w-full h-full object-cover" autoPlay muted playsInline />
+            <canvas ref={canvasRef} className="hidden" />
             <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
                  <div className="w-64 h-64 border-4 border-dashed border-white/50 rounded-lg"/>
             </div>
@@ -149,13 +217,6 @@ export default function CheckInScannerPage() {
           
           <div className="p-6 border rounded-lg h-36 flex items-center justify-center">
             <StatusDisplay />
-          </div>
-
-          {/* Mock buttons for simulation */}
-          <div className="flex justify-center gap-4 pt-4">
-             <Button onClick={() => handleMockScan('success')} variant="outline" disabled={scanStatus !== 'waiting'}>Simulate Success</Button>
-             <Button onClick={() => handleMockScan('failure')} variant="outline" disabled={scanStatus !== 'waiting'}>Simulate Failure</Button>
-             <Button onClick={() => handleMockScan('duplicate')} variant="outline" disabled={scanStatus !== 'waiting'}>Simulate Duplicate</Button>
           </div>
           
           <div className="text-center pt-4">
