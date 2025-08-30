@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import { SiteHeader } from '@/components/site-header';
 import { Footer } from '@/components/footer';
 import { Toaster } from '@/components/ui/toaster';
+import { EventProvider } from '@/context/EventContext';
 
 export const metadata: Metadata = {
   title: 'EventSpotlight',
@@ -22,10 +22,11 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
       </head>
       <body className="font-body antialiased min-h-screen flex flex-col">
-        {/* <SiteHeader /> */}
-        <main className="flex-1">{children}</main>
-        <Footer />
-        <Toaster />
+        <EventProvider>
+            <main className="flex-1">{children}</main>
+            <Footer />
+            <Toaster />
+        </EventProvider>
       </body>
     </html>
   );

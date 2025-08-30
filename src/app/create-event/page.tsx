@@ -1,3 +1,6 @@
+'use client';
+
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -7,8 +10,63 @@ import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { PlusCircle, Trash2 } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { useEvents } from "@/context/EventContext";
+import type { Event } from "@/types";
 
 export default function CreateEventPage() {
+  const { addEvent } = useEvents();
+  const { toast } = useToast();
+  
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [date, setDate] = useState('');
+  const [category, setCategory] = useState('');
+  const [venue, setVenue] = useState('');
+
+  const handlePublish = () => {
+    if(!title || !description || !date || !category || !venue) {
+        toast({
+            title: "Error",
+            description: "Please fill all the required fields.",
+            variant: "destructive"
+        })
+        return;
+    }
+
+    const newEvent: Event = {
+      id: `new-${Date.now()}`,
+      title,
+      description,
+      shortDescription: description.substring(0, 100) + '...',
+      image: 'https://picsum.photos/seed/newevent/1200/800',
+      date,
+      location: venue.split(',')[0],
+      category: category as any,
+      isFeatured: false,
+      venue: { name: venue.split(',')[0], address: venue },
+      tickets: [{ id: 't-new', name: 'General', price: 50, quantity: 100, saleStartDate: new Date().toISOString(), saleEndDate: date }],
+      published: true,
+      organizer: 'Admin',
+      externalLink: '#',
+    };
+
+    addEvent(newEvent);
+
+    toast({
+        title: "Event Published!",
+        description: "Your new event is now live for attendees to see.",
+    });
+
+    // Reset form
+    setTitle('');
+    setDescription('');
+    setDate('');
+    setCategory('');
+    setVenue('');
+  };
+
+
   return (
     <div className="container mx-auto px-4 py-12 max-w-4xl">
       <Card>
@@ -19,12 +77,12 @@ export default function CreateEventPage() {
         <CardContent className="space-y-8">
           <div className="space-y-2">
             <Label htmlFor="title">Event Title</Label>
-            <Input id="title" placeholder="e.g., Summer Music Festival" />
+            <Input id="title" placeholder="e.g., Summer Music Festival" value={title} onChange={(e) => setTitle(e.target.value)} />
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="description">Description</Label>
-            <Textarea id="description" placeholder="Tell attendees about your event" rows={5}/>
+            <Textarea id="description" placeholder="Tell attendees about your event" rows={5} value={description} onChange={(e) => setDescription(e.target.value)} />
           </div>
           
           <div className="space-y-2">
@@ -35,21 +93,21 @@ export default function CreateEventPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
                 <Label htmlFor="date">Date & Time</Label>
-                <Input id="date" type="datetime-local" />
+                <Input id="date" type="datetime-local" value={date} onChange={(e) => setDate(e.target.value)} />
             </div>
             <div className="space-y-2">
                 <Label htmlFor="category">Category</Label>
-                 <Select>
+                 <Select onValueChange={setCategory} value={category}>
                   <SelectTrigger id="category">
                     <SelectValue placeholder="Select a category" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="music">Music</SelectItem>
-                    <SelectItem value="sports">Sports</SelectItem>
-                    <SelectItem value="technology">Technology</SelectItem>
-                    <SelectItem value="conference">Conference</SelectItem>
-                    <SelectItem value="arts">Arts</SelectItem>
-                    <SelectItem value="food">Food</SelectItem>
+                    <SelectItem value="Music">Music</SelectItem>
+                    <SelectItem value="Sports">Sports</SelectItem>
+                    <SelectItem value="Technology">Technology</SelectItem>
+                    <SelectItem value="Conference">Conference</SelectItem>
+                    <SelectItem value="Arts">Arts</SelectItem>
+                    <SelectItem value="Food">Food</SelectItem>
                   </SelectContent>
                 </Select>
             </div>
@@ -57,7 +115,7 @@ export default function CreateEventPage() {
 
            <div className="space-y-2">
             <Label htmlFor="venue">Venue Name & Address</Label>
-            <Input id="venue" placeholder="e.g., Central Park, New York" />
+            <Input id="venue" placeholder="e.g., Central Park, New York" value={venue} onChange={(e) => setVenue(e.target.value)} />
           </div>
 
           <Separator />
@@ -107,7 +165,7 @@ export default function CreateEventPage() {
                   <Label htmlFor="publish" className="font-semibold">Publish Event</Label>
                   <p className="text-sm text-muted-foreground">Make your event visible to everyone.</p>
                 </div>
-                <Switch id="publish"/>
+                <Switch id="publish" defaultChecked/>
              </div>
              <div className="flex items-center justify-between p-4 border rounded-lg">
                 <div>
@@ -120,7 +178,7 @@ export default function CreateEventPage() {
 
            <div className="flex justify-end gap-2">
             <Button variant="outline">Save as Draft</Button>
-            <Button>Publish Event</Button>
+            <Button onClick={handlePublish}>Publish Event</Button>
            </div>
         </CardContent>
       </Card>

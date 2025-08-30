@@ -1,3 +1,5 @@
+'use client';
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -6,6 +8,8 @@ import { getEvents } from "@/lib/mock-data";
 import { getAiRecommendation } from "../actions/ai";
 import { EventCard } from "@/components/event-card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useEvents } from "@/context/EventContext";
+import { useEffect, useState } from "react";
 
 const bookedTickets = [
     { id: '1', title: 'Stellar Sound Fest', date: 'Aug 15, 2024', location: 'Greenfield Valley, CA', quantity: 2 },
@@ -22,9 +26,18 @@ const recentChats = [
     { name: 'John Smith', message: 'See you at the workshop.', avatar: 'https://i.pravatar.cc/150?u=john' }
 ]
 
-export default async function AttendeeDashboardPage() {
-  const aiRecommendation = await getAiRecommendation();
+export default function AttendeeDashboardPage() {
+  const { newEvents } = useEvents();
+  const [aiRecommendation, setAiRecommendation] = useState('');
   const recommendedEvents = getEvents().slice(3,5);
+
+  useEffect(() => {
+    async function fetchRecommendation() {
+        const recommendation = await getAiRecommendation();
+        setAiRecommendation(recommendation);
+    }
+    fetchRecommendation();
+  }, []);
 
   return (
     <div className="container mx-auto px-4 py-12">
@@ -39,16 +52,16 @@ export default async function AttendeeDashboardPage() {
         </TabsList>
         <TabsContent value="tickets">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-            {bookedTickets.map(ticket => (
+            {[...bookedTickets, ...newEvents].map((ticket: any) => (
                  <Card key={ticket.id}>
                     <CardHeader>
                         <CardTitle>{ticket.title}</CardTitle>
-                        <CardDescription>{ticket.date} - {ticket.location}</CardDescription>
+                        <CardDescription>{ticket.date ? new Date(ticket.date).toLocaleDateString() : 'Date not set'} - {ticket.location}</CardDescription>
                     </CardHeader>
                     <CardContent>
                         <div className="flex items-center gap-2 text-primary font-semibold">
                             <Ticket className="h-5 w-5"/>
-                            <p>x{ticket.quantity} Tickets</p>
+                            <p>x{ticket.quantity || 1} Tickets</p>
                         </div>
                     </CardContent>
                     <CardFooter className="flex gap-2">
@@ -57,7 +70,7 @@ export default async function AttendeeDashboardPage() {
                     </CardFooter>
                  </Card>
             ))}
-            {bookedTickets.length === 0 && (
+            {bookedTickets.length === 0 && newEvents.length === 0 && (
                 <p className="col-span-full text-center text-muted-foreground mt-8">You have no upcoming events.</p>
             )}
           </div>
@@ -66,7 +79,7 @@ export default async function AttendeeDashboardPage() {
             <Card className="mt-6 bg-accent/20 border-accent/50">
                 <CardHeader>
                     <CardTitle className="flex items-center gap-2"><Sparkles className="h-6 w-6 text-accent"/>AI Recommendations</CardTitle>
-                    <CardDescription>{aiRecommendation}</CardDescription>
+                    <CardDescription>{aiRecommendation || "Our top picks for you based on your interests."}</CardDescription>
                 </CardHeader>
                 <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {recommendedEvents.map(event => <EventCard key={event.id} event={event} />)}
