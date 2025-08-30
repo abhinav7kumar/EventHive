@@ -19,11 +19,13 @@ import {
 } from '@/components/ui/accordion';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import Link from 'next/link';
+import { useToast } from '@/hooks/use-toast';
 
 export default function EventDetailPage({ params }: { params: { id: string } }) {
   const event = getEventById(params.id);
   const [ticketQuantities, setTicketQuantities] = useState<Record<string, number>>({});
   const [formattedDate, setFormattedDate] = useState('');
+  const { toast } = useToast();
 
   useEffect(() => {
     if (event) {
@@ -48,6 +50,23 @@ export default function EventDetailPage({ params }: { params: { id: string } }) 
       const quantity = ticketQuantities[ticket.id] || 1;
       return total + (ticket.price * quantity);
     }, 0);
+  };
+
+  const handleShare = () => {
+    const url = window.location.href;
+    navigator.clipboard.writeText(url).then(() => {
+      toast({
+        title: 'Link Copied!',
+        description: 'The event link has been copied to your clipboard.',
+      });
+    }).catch(err => {
+      console.error('Failed to copy text: ', err);
+      toast({
+        title: 'Error',
+        description: 'Could not copy the link.',
+        variant: 'destructive',
+      });
+    });
   };
 
   const osmUrl = `https://www.openstreetmap.org/?mlat=${event.venue.lat}&mlon=${event.venue.lng}#map=16/${event.venue.lat}/${event.venue.lng}`;
@@ -246,7 +265,7 @@ export default function EventDetailPage({ params }: { params: { id: string } }) 
             <Card>
                 <CardHeader><CardTitle>Engage</CardTitle></CardHeader>
                 <CardContent className="flex flex-col gap-2">
-                    <Button variant="outline"><Share2 className="mr-2"/>Share Event</Button>
+                    <Button variant="outline" onClick={handleShare}><Share2 className="mr-2"/>Share Event</Button>
                     <Button variant="outline"><CalendarPlus className="mr-2"/>Add to Calendar</Button>
                      <div className="flex items-center justify-center pt-2">
                         <Hash className="h-5 w-5 text-muted-foreground"/>
