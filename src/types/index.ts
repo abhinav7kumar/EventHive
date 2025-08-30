@@ -11,7 +11,7 @@ export type Event = {
   category: EventCategory;
   isFeatured?: boolean;
   isTrending?: boolean;
-  schedule?: { time: string; activity: string }[];
+  schedule?: { time: string; activity: string; details?: string }[];
   speakers?: { name:string; title: string; avatar: string }[];
   venue: {
     name: string;
