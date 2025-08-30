@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Button } from "@/components/ui/button";
@@ -146,6 +147,11 @@ export default function AttendeeDashboardPage() {
                   <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       {recommendedEvents.map(event => <EventCard key={event.id} event={event} />)}
                   </CardContent>
+                   <CardFooter>
+                      <Link href="/events" className="w-full">
+                        <Button variant="outline" className="w-full">Browse All Events</Button>
+                      </Link>
+                  </CardFooter>
               </Card>
           </TabsContent>
           <TabsContent value="community">
