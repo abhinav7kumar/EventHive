@@ -16,6 +16,7 @@ function usePaymentStatus(transactionId: string) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const eventId = searchParams.get('eventId');
+  const total = searchParams.get('total');
 
   useEffect(() => {
     if (!transactionId) return;
@@ -27,7 +28,7 @@ function usePaymentStatus(transactionId: string) {
         if (status === 'PAID') {
           clearInterval(interval);
           localStorage.removeItem(`payment_${transactionId}`); // Clean up
-          router.push(`/checkout/confirmation?eventId=${eventId}`);
+          router.push(`/checkout/confirmation?eventId=${eventId}&total=${total}`);
         }
       } catch (error) {
         console.error("Could not access localStorage:", error);
@@ -36,7 +37,7 @@ function usePaymentStatus(transactionId: string) {
     }, 2000); // Check every 2 seconds
 
     return () => clearInterval(interval); // Cleanup on component unmount
-  }, [transactionId, eventId, router]);
+  }, [transactionId, eventId, total, router]);
 }
 
 
@@ -50,8 +51,6 @@ function PaymentFlow() {
   // Generate a unique ID for this transaction
   const [transactionId] = useState(() => `txn_${Date.now()}`);
 
-  // Start polling for payment status
-  usePaymentStatus(transactionId);
   
   useEffect(() => {
      // Set initial payment status to PENDING
@@ -62,7 +61,7 @@ function PaymentFlow() {
      }
   }, [transactionId]);
 
-
+  
   if (!eventId || !ticketsParam) {
     return notFound();
   }
@@ -70,7 +69,7 @@ function PaymentFlow() {
   if (!event) {
     return notFound();
   }
-
+  
   const selectedTickets = ticketsParam.split(',').map(t => {
     const [ticketId, quantity] = t.split(':');
     const ticketInfo = event.tickets.find(ti => ti.id === ticketId);
@@ -81,6 +80,9 @@ function PaymentFlow() {
   const processingFee = subtotal * 0.05;
   const total = subtotal + processingFee;
   
+  // Start polling for payment status, now passing total
+  usePaymentStatus(transactionId);
+
   const mobilePaymentUrl = `/checkout/pay-mobile?transactionId=${transactionId}&eventId=${eventId}&total=${total.toFixed(2)}`;
 
   const handleSimulatePayment = () => {
