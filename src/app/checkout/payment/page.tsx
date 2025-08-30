@@ -81,7 +81,9 @@ function PaymentQRCode() {
   const total = subtotal + processingFee;
 
   // The QR code now points to a mobile payment page with the transaction details
-  const mobilePaymentUrl = `${window.location.origin}/checkout/pay-mobile?transactionId=${transactionId}&eventId=${eventId}&total=${total.toFixed(2)}`;
+  // Use a publicly accessible URL for the QR code
+  const publicOrigin = 'https://event-ticketing-app-a-new-start.web.app';
+  const mobilePaymentUrl = `${publicOrigin}/checkout/pay-mobile?transactionId=${transactionId}&eventId=${eventId}&total=${total.toFixed(2)}`;
   const encodedQrData = encodeURIComponent(mobilePaymentUrl);
 
 
