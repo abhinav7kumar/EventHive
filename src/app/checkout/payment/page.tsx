@@ -86,7 +86,7 @@ function PaymentFlow() {
   const mobilePaymentUrl = `/checkout/pay-mobile?transactionId=${transactionId}&eventId=${eventId}&total=${total.toFixed(2)}`;
 
   const handleSimulatePayment = () => {
-    window.open(mobilePaymentUrl, '_blank', 'noopener,noreferrer');
+    router.push(mobilePaymentUrl);
   }
 
 
@@ -115,7 +115,7 @@ function PaymentFlow() {
                     Simulate Mobile Payment
                 </Button>
                  <p className="text-xs text-muted-foreground text-center max-w-xs">
-                    This will open the payment confirmation page in a new tab.
+                    This will open the payment confirmation page in the same tab.
                 </p>
             </div>
             <div className="flex items-center space-x-2 text-muted-foreground animate-pulse">
