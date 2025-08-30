@@ -33,3 +33,32 @@ export type TicketType = {
   saleStartDate: string;
   saleEndDate: string;
 };
+
+export type Attendee = {
+  id: string;
+  name: string;
+  email: string;
+  avatar: string;
+  eventsAttended: number;
+  lastActive: string;
+};
+
+export type Organizer = {
+  id: string;
+  name: string;
+  email: string;
+  avatar: string;
+  eventsOrganized: number;
+  isVerified: boolean;
+  status: 'Active' | 'Pending Review' | 'Suspended';
+};
+
+export type Vendor = {
+  id: string;
+  companyName: string;
+  contactName: string;
+  email: string;
+  avatar: string;
+  sponsoredEvents: number;
+  status: 'Active' | 'Inactive';
+};

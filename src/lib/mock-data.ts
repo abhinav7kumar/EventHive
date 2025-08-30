@@ -1,4 +1,4 @@
-import type { Event, EventCategory } from '@/types';
+import type { Event, EventCategory, Attendee, Organizer, Vendor } from '@/types';
 
 const mockEvents: Event[] = [
   {
@@ -117,6 +117,24 @@ const mockEvents: Event[] = [
   },
 ];
 
+const mockAttendees: Attendee[] = [
+  { id: 'att-1', name: 'Alice Johnson', email: 'alice@example.com', avatar: 'https://i.pravatar.cc/150?u=alice', eventsAttended: 5, lastActive: '2024-07-28' },
+  { id: 'att-2', name: 'Bob Williams', email: 'bob@example.com', avatar: 'https://i.pravatar.cc/150?u=bob', eventsAttended: 2, lastActive: '2024-07-25' },
+  { id: 'att-3', name: 'Charlie Brown', email: 'charlie@example.com', avatar: 'https://i.pravatar.cc/150?u=charlie', eventsAttended: 8, lastActive: '2024-07-29' },
+];
+
+const mockOrganizers: Organizer[] = [
+    { id: 'org-1', name: 'Future Forward Events', email: 'contact@futureforward.com', avatar: 'https://i.pravatar.cc/150?u=ffe', eventsOrganized: 3, isVerified: true, status: 'Active' },
+    { id: 'org-2', name: 'Gourmet Gatherings', email: 'info@gourmetgatherings.co', avatar: 'https://i.pravatar.cc/150?u=gg', eventsOrganized: 5, isVerified: true, status: 'Active' },
+    { id: 'org-3', name: 'Arts United', email: 'support@artsunited.org', avatar: 'https://i.pravatar.cc/150?u=au', eventsOrganized: 12, isVerified: false, status: 'Pending Review' },
+];
+
+const mockVendors: Vendor[] = [
+    { id: 'ven-1', companyName: 'Starlight Catering', contactName: 'David Chen', email: 'david@starlight.com', avatar: 'https://i.pravatar.cc/150?u=david', sponsoredEvents: 4, status: 'Active' },
+    { id: 'ven-2', name: 'AV Pro Solutions', email: 'sales@avpro.com', avatar: 'https://i.pravatar.cc/150?u=avpro', sponsoredEvents: 10, status: 'Active' },
+    { id: 'ven-3', name: 'Event Security Services', email: 'contact@ess.com', avatar: 'https://i.pravatar.cc/150?u=ess', sponsoredEvents: 2, status: 'Inactive' },
+];
+
 export const getEvents = (): Event[] => mockEvents;
 
 export const getEventById = (id: string): Event | undefined => mockEvents.find(event => event.id === id);
@@ -129,3 +147,7 @@ export const getCategories = (): EventCategory[] => {
   const categories = mockEvents.map(event => event.category);
   return [...new Set(categories)];
 };
+
+export const getAttendees = (): Attendee[] => mockAttendees;
+export const getOrganizers = (): Organizer[] => mockOrganizers;
+export const getVendors = (): Vendor[] => mockVendors;

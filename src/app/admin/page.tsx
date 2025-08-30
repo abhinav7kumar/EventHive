@@ -131,9 +131,15 @@ export default function AdminDashboardPage() {
                     <CardDescription>Manage organizers, attendees, and vendors.</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-2">
-                    <Button variant="outline" className="w-full justify-start">Manage Attendees</Button>
-                    <Button variant="outline" className="w-full justify-start">Manage Organizers</Button>
-                    <Button variant="outline" className="w-full justify-start">Manage Vendors</Button>
+                    <Link href="/admin/users/attendees" className="w-full">
+                        <Button variant="outline" className="w-full justify-start">Manage Attendees</Button>
+                    </Link>
+                    <Link href="/admin/users/organizers" className="w-full">
+                        <Button variant="outline" className="w-full justify-start">Manage Organizers</Button>
+                    </Link>
+                     <Link href="/admin/users/vendors" className="w-full">
+                        <Button variant="outline" className="w-full justify-start">Manage Vendors</Button>
+                    </Link>
                   </CardContent>
                 </Card>
 
