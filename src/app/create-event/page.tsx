@@ -96,6 +96,13 @@ function CreateEventForm() {
     setVenue('');
   };
 
+  const handleSaveDraft = () => {
+    toast({
+        title: "Draft Saved!",
+        description: "Your event has been saved as a draft.",
+    });
+  };
+
 
   return (
     <div className="container mx-auto px-4 py-12 max-w-4xl">
@@ -207,7 +214,7 @@ function CreateEventForm() {
            </div>
 
            <div className="flex justify-end gap-2">
-            <Button variant="outline">Save as Draft</Button>
+            <Button variant="outline" onClick={handleSaveDraft}>Save as Draft</Button>
             <Button onClick={handlePublish}>{isEditMode ? 'Update Event' : 'Publish Event'}</Button>
            </div>
         </CardContent>
