@@ -7,9 +7,10 @@ import Image from 'next/image';
 import { getEventById } from '@/lib/mock-data';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, Loader2 } from 'lucide-react';
+import { ArrowLeft, Loader2, Info } from 'lucide-react';
 import Link from 'next/link';
 import { SiteHeader } from '@/components/site-header';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 function usePaymentStatus(transactionId: string) {
   const router = useRouter();
@@ -79,11 +80,14 @@ function PaymentQRCode() {
   const subtotal = selectedTickets.reduce((acc, ticket) => acc + (ticket.price || 0) * ticket.quantity, 0);
   const processingFee = subtotal * 0.05;
   const total = subtotal + processingFee;
-
-  // The QR code now points to a mobile payment page with the transaction details
-  // Use a publicly accessible URL for the QR code
-  const publicOrigin = 'https://event-ticketing-app-a-new-start.web.app';
-  const mobilePaymentUrl = `${publicOrigin}/checkout/pay-mobile?transactionId=${transactionId}&eventId=${eventId}&total=${total.toFixed(2)}`;
+  
+  // !! IMPORTANT FOR LOCAL TESTING !!
+  // Replace "YOUR_COMPUTER_IP_ADDRESS" with your actual local IP address.
+  // Your computer and phone must be on the same Wi-Fi network.
+  // The port should match the one your Next.js app is running on (e.g., 9002).
+  const localIpAddress = "YOUR_COMPUTER_IP_ADDRESS"; 
+  const port = "9002";
+  const mobilePaymentUrl = `http://${localIpAddress}:${port}/checkout/pay-mobile?transactionId=${transactionId}&eventId=${eventId}&total=${total.toFixed(2)}`;
   const encodedQrData = encodeURIComponent(mobilePaymentUrl);
 
 
@@ -115,9 +119,13 @@ function PaymentQRCode() {
                 <Loader2 className="h-5 w-5 animate-spin" />
                 <p>Waiting for payment...</p>
             </div>
-             <p className="text-xs text-center text-muted-foreground pt-4">
-              This is a live simulation. Scan the code with your phone's camera to open the payment page on your mobile device.
-            </p>
+             <Alert>
+                <Info className="h-4 w-4" />
+                <AlertTitle>How to Test Locally</AlertTitle>
+                <AlertDescription>
+                    To test this, you must replace the placeholder in the code with your computer's local IP address. Then, connect your phone to the same Wi-Fi network as your computer and scan the code.
+                </AlertDescription>
+            </Alert>
           </CardContent>
         </Card>
       </div>
