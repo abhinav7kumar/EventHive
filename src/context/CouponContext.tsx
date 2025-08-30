@@ -12,6 +12,8 @@ export interface Coupon {
 interface CouponContextType {
   coupons: Coupon[];
   addCoupon: (coupon: Coupon) => void;
+  updateCoupon: (updatedCoupon: Coupon) => void;
+  deleteCoupon: (couponId: string) => void;
 }
 
 const CouponContext = createContext<CouponContextType | undefined>(undefined);
@@ -23,8 +25,21 @@ export const CouponProvider = ({ children }: { children: ReactNode }) => {
     setCoupons((prevCoupons) => [...prevCoupons, coupon]);
   };
 
+  const updateCoupon = (updatedCoupon: Coupon) => {
+    setCoupons((prevCoupons) =>
+      prevCoupons.map((coupon) =>
+        coupon.id === updatedCoupon.id ? updatedCoupon : coupon
+      )
+    );
+  };
+  
+  const deleteCoupon = (couponId: string) => {
+    setCoupons((prevCoupons) => prevCoupons.filter(coupon => coupon.id !== couponId));
+  };
+
+
   return (
-    <CouponContext.Provider value={{ coupons, addCoupon }}>
+    <CouponContext.Provider value={{ coupons, addCoupon, updateCoupon, deleteCoupon }}>
       {children}
     </CouponContext.Provider>
   );
