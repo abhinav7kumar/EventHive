@@ -8,7 +8,7 @@ import { CouponProvider } from '@/context/CouponContext';
 import { ReferralProvider } from '@/context/ReferralContext';
 
 export const metadata: Metadata = {
-  title: 'EventSpotlight',
+  title: 'EventHive',
   description: 'Your stage for unforgettable events.',
 };
 

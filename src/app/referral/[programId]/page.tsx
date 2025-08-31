@@ -6,7 +6,7 @@ import { getEventById } from '@/lib/mock-data';
 import Image from 'next/image';
 import { Ticket, Calendar, MapPin, Percent, ArrowRight } from 'lucide-react';
 import { format } from 'date-fns';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
@@ -42,7 +42,7 @@ export default function ReferralLandingPage() {
                             <div className="flex justify-between items-center pb-4 border-b border-dashed">
                                 <div className="flex items-center gap-2">
                                     <Ticket className="h-6 w-6 text-primary" />
-                                    <h2 className="text-xl font-bold text-primary">EventSpotlight</h2>
+                                    <h2 className="text-xl font-bold text-primary">EventHive</h2>
                                 </div>
                                  <Badge variant="outline" className="text-lg border-primary text-primary">
                                     <Percent className="h-4 w-4 mr-1"/> {program.friendDiscount}% OFF

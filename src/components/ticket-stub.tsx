@@ -26,7 +26,7 @@ export const TicketStub = React.forwardRef<HTMLDivElement, TicketStubProps>(({ t
                 <div className="flex justify-between items-center pb-4 border-b border-dashed">
                     <div className="flex items-center gap-2">
                         <Ticket className="h-6 w-6 text-primary" />
-                        <h2 className="text-xl font-bold text-primary">EventSpotlight</h2>
+                        <h2 className="text-xl font-bold text-primary">EventHive</h2>
                     </div>
                     <div className="text-right">
                         <p className="text-xs text-muted-foreground">Admit One</p>
