@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Ticket, User, Shield, Briefcase, LayoutDashboard } from "lucide-react";
+import { Terminal, User, Shield, Briefcase, LayoutDashboard } from "lucide-react";
 import Link from "next/link";
 import { SiteHeader } from "@/components/site-header";
 
@@ -43,7 +43,7 @@ export default function LoginPage() {
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
             <div className="flex justify-center mb-2">
-                <Ticket className="h-8 w-8 text-primary"/>
+                <Terminal className="h-8 w-8 text-primary"/>
             </div>
           <CardTitle>Welcome Back</CardTitle>
           <CardDescription>Select your role to sign in to your account.</CardDescription>

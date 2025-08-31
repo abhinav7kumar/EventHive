@@ -4,7 +4,7 @@
 import Link from 'next/link';
 import {
   Menu,
-  Ticket,
+  Terminal,
   User,
   PlusCircle,
   LayoutDashboard,
@@ -41,7 +41,7 @@ export function SiteHeader() {
       <div className="container flex h-14 max-w-screen-2xl items-center">
         <div className="mr-4 hidden md:flex">
           <Link href="/" className="mr-6 flex items-center space-x-2">
-            <Ticket className="h-6 w-6 text-primary" />
+            <Terminal className="h-6 w-6 text-primary" />
             <span className="hidden font-bold sm:inline-block">EventHive</span>
           </Link>
           <nav className="flex items-center gap-6 text-sm">
@@ -67,7 +67,7 @@ export function SiteHeader() {
             </SheetTrigger>
             <SheetContent side="left" className="pr-0">
               <Link href="/" className="mr-6 flex items-center space-x-2">
-                <Ticket className="h-6 w-6 text-primary" />
+                <Terminal className="h-6 w-6 text-primary" />
                 <span className="font-bold">EventHive</span>
               </Link>
               <div className="my-4 h-[calc(100vh-8rem)] pb-10 pl-6">
