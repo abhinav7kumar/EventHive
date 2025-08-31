@@ -149,7 +149,7 @@ export default function LoginPage() {
                     <TabsTrigger value="vendor"><LayoutDashboard className="mr-2"/>Vendor</TabsTrigger>
                 </TabsList>
                 <TabsContent value="attendee">
-                    <LoginForm role="Attendee" email="attendee@example.com" password="password123" dashboardPath="/attendee" />
+                    <LoginForm role="Attendee" email="abhinav.kumar9888@gmail.com" password="12345678" dashboardPath="/attendee" />
                 </TabsContent>
                 <TabsContent value="organizer">
                     <LoginForm role="Organizer" email="organizer@example.com" password="password123" dashboardPath="/organizer" />
