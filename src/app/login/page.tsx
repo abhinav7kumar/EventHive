@@ -8,10 +8,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Terminal, User, Shield, Briefcase, LayoutDashboard, KeyRound } from "lucide-react";
+import { Terminal, User, Shield, Briefcase, LayoutDashboard, KeyRound, Building, Ticket } from "lucide-react";
 import Link from "next/link";
-import { SiteHeader } from "@/components/site-header";
 import { useToast } from "@/hooks/use-toast";
+import Image from "next/image";
 
 
 function LoginForm({ role, email: defaultEmail, password: defaultPassword, dashboardPath }: { role: string, email?: string, password?: string, dashboardPath: string }) {
@@ -129,47 +129,56 @@ function LoginForm({ role, email: defaultEmail, password: defaultPassword, dashb
 
 export default function LoginPage() {
   return (
-    <>
-    <SiteHeader />
-    <div className="flex items-center justify-center min-h-[calc(100vh-10rem)] py-12">
-      <Card className="w-full max-w-md">
-        <CardHeader className="text-center">
-            <div className="flex justify-center mb-2">
-                <Terminal className="h-8 w-8 text-primary"/>
+    <div className="w-full lg:grid lg:min-h-screen lg:grid-cols-2">
+        <div className="flex items-center justify-center py-12">
+            <div className="mx-auto grid w-[350px] gap-6">
+                 <div className="grid gap-2 text-center">
+                    <div className="flex justify-center items-center gap-2 mb-4">
+                        <Ticket className="h-8 w-8 text-primary"/>
+                        <h1 className="text-3xl font-bold">EventHive</h1>
+                    </div>
+                    <p className="text-balance text-muted-foreground">
+                        Select your role to sign in to your account.
+                    </p>
+                </div>
+                <Tabs defaultValue="attendee" className="w-full">
+                    <TabsList className="grid w-full grid-cols-2 md:grid-cols-4">
+                        <TabsTrigger value="attendee"><User className="mr-2"/>Attendee</TabsTrigger>
+                        <TabsTrigger value="organizer"><Briefcase className="mr-2"/>Organizer</TabsTrigger>
+                        <TabsTrigger value="admin"><Shield className="mr-2"/>Admin</TabsTrigger>
+                        <TabsTrigger value="vendor"><LayoutDashboard className="mr-2"/>Vendor</TabsTrigger>
+                    </TabsList>
+                    <TabsContent value="attendee">
+                        <LoginForm role="Attendee" email="abhinav.kumar9888@gmail.com" password="12345678" dashboardPath="/attendee" />
+                    </TabsContent>
+                    <TabsContent value="organizer">
+                        <LoginForm role="Organizer" email="organizer@example.com" password="password123" dashboardPath="/organizer" />
+                    </TabsContent>
+                    <TabsContent value="admin">
+                        <LoginForm role="Admin" email="admin@example.com" password="password123" dashboardPath="/admin" />
+                    </TabsContent>
+                    <TabsContent value="vendor">
+                        <LoginForm role="Vendor" email="vendor@example.com" password="password123" dashboardPath="/vendor" />
+                    </TabsContent>
+                </Tabs>
+                <div className="mt-4 text-center text-sm">
+                    Don&apos;t have an account?{' '}
+                    <Link href="#" className="underline">
+                    Sign up
+                    </Link>
+                </div>
             </div>
-          <CardTitle>Welcome Back</CardTitle>
-          <CardDescription>Select your role to sign in to your account.</CardDescription>
-        </CardHeader>
-        <CardContent>
-            <Tabs defaultValue="attendee" className="w-full">
-                <TabsList className="grid w-full grid-cols-2 md:grid-cols-4">
-                    <TabsTrigger value="attendee"><User className="mr-2"/>Attendee</TabsTrigger>
-                    <TabsTrigger value="organizer"><Briefcase className="mr-2"/>Organizer</TabsTrigger>
-                    <TabsTrigger value="admin"><Shield className="mr-2"/>Admin</TabsTrigger>
-                    <TabsTrigger value="vendor"><LayoutDashboard className="mr-2"/>Vendor</TabsTrigger>
-                </TabsList>
-                <TabsContent value="attendee">
-                    <LoginForm role="Attendee" email="abhinav.kumar9888@gmail.com" password="12345678" dashboardPath="/attendee" />
-                </TabsContent>
-                <TabsContent value="organizer">
-                    <LoginForm role="Organizer" email="organizer@example.com" password="password123" dashboardPath="/organizer" />
-                </TabsContent>
-                <TabsContent value="admin">
-                    <LoginForm role="Admin" email="admin@example.com" password="password123" dashboardPath="/admin" />
-                </TabsContent>
-                <TabsContent value="vendor">
-                    <LoginForm role="Vendor" email="vendor@example.com" password="password123" dashboardPath="/vendor" />
-                </TabsContent>
-            </Tabs>
-           <div className="mt-4 text-center text-sm">
-            Don't have an account?{' '}
-            <Link href="#" className="text-primary hover:underline">
-              Sign up
-            </Link>
-          </div>
-        </CardContent>
-      </Card>
+        </div>
+      <div className="hidden bg-muted lg:block">
+        <Image
+          src="https://picsum.photos/seed/login-party/1200/1800"
+          alt="Image"
+          width="1200"
+          height="1800"
+          data-ai-hint="people at concert"
+          className="h-full w-full object-cover dark:brightness-[0.3]"
+        />
+      </div>
     </div>
-    </>
   );
 }
