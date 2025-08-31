@@ -65,7 +65,7 @@ export function HomePageClient({
 
   return (
     <div className="flex flex-col min-h-dvh">
-      <section className="relative w-full h-[50vh] md:h-[60vh] text-white">
+      <section className="relative w-full h-[60vh] md:h-[70vh] text-white">
         <Image
           src="https://picsum.photos/seed/hero/1800/1000"
           alt="Hero background"
@@ -75,7 +75,7 @@ export function HomePageClient({
           priority
         />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
-        <div className="absolute inset-0 bg-black/30" />
+        <div className="absolute inset-0 bg-black/40" />
         <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-4">
           <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight drop-shadow-lg font-headline">
             Find Your Next Experience
@@ -83,7 +83,7 @@ export function HomePageClient({
           <p className="mt-4 max-w-2xl text-lg md:text-xl text-primary-foreground/90 drop-shadow-md">
             Discover, book, and enjoy unforgettable events.
           </p>
-          <form className="mt-8 w-full max-w-2xl bg-white/20 backdrop-blur-sm p-2 rounded-full shadow-lg flex items-center gap-2" onSubmit={(e) => e.preventDefault()}>
+          <form className="mt-8 w-full max-w-lg bg-white/10 backdrop-blur-sm p-2 rounded-full shadow-lg flex flex-col sm:flex-row items-center gap-2" onSubmit={(e) => e.preventDefault()}>
             <div className="relative w-full">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-background" />
               <Input
@@ -97,7 +97,7 @@ export function HomePageClient({
             <Button
               type="submit"
               size="lg"
-              className="rounded-full h-12 px-8 bg-primary hover:bg-primary/90"
+              className="rounded-full h-12 px-8 bg-primary hover:bg-primary/90 w-full sm:w-auto"
             >
               Search
             </Button>
@@ -112,7 +112,6 @@ export function HomePageClient({
             <Carousel
               opts={{
                 align: 'start',
-                loop: true,
               }}
               className="w-full"
             >
@@ -125,8 +124,8 @@ export function HomePageClient({
                   </CarouselItem>
                 ))}
               </CarouselContent>
-              <CarouselPrevious className="-left-4" />
-              <CarouselNext className="-right-4" />
+              <CarouselPrevious className="hidden sm:flex -left-4" />
+              <CarouselNext className="hidden sm:flex -right-4" />
             </Carousel>
           </section>
         )}

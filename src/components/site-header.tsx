@@ -61,15 +61,14 @@ export function SiteHeader() {
           </nav>
         </div>
 
-        <div className="md:hidden">
-          <Sheet>
+        <Sheet>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon">
+              <Button variant="ghost" size="icon" className="md:hidden">
                 <Menu className="h-5 w-5" />
                 <span className="sr-only">Toggle Menu</span>
               </Button>
             </SheetTrigger>
-            <SheetContent side="left" className="pr-0">
+            <SheetContent side="left" className="pr-0 md:hidden">
               <Link href="/" className="mr-6 flex items-center space-x-2">
                 <Terminal className="h-6 w-6 text-primary" />
                 <span className="font-bold">EventHive</span>
@@ -77,7 +76,7 @@ export function SiteHeader() {
               <div className="my-4 h-[calc(100vh-8rem)] pb-10 pl-6">
                 <div className="flex flex-col space-y-3">
                   {navLinks.map((link) => (
-                    <Link key={link.href} href={link.href}>
+                    <Link key={link.href} href={link.href} className="text-lg font-medium">
                       {link.label}
                     </Link>
                   ))}
@@ -85,10 +84,8 @@ export function SiteHeader() {
               </div>
             </SheetContent>
           </Sheet>
-        </div>
 
         <div className="flex flex-1 items-center justify-end space-x-2">
-          <div className="flex-1" />
           {!isLoggedIn && !isLoginPage && (
              <div className="flex items-center gap-2">
                 <Link href="/login">

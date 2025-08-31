@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { ArrowRight, Ticket } from 'lucide-react';
 import { SiteHeader } from '@/components/site-header';
+import Link from 'next/link';
 
 function Checkout() {
   const searchParams = useSearchParams();
@@ -42,11 +43,16 @@ function Checkout() {
   return (
     <>
       <SiteHeader />
-      <div className="container mx-auto px-4 py-12 max-w-3xl">
+      <div className="container mx-auto px-4 py-8 md:py-12 max-w-4xl">
+        <Link href={`/events/${event.id}`}>
+          <Button variant="ghost" className="mb-4">
+              <ArrowRight className="mr-2 h-4 w-4 transform rotate-180" /> Back to Event
+          </Button>
+        </Link>
         <h1 className="text-3xl font-bold mb-2">Checkout</h1>
         <p className="text-muted-foreground mb-8">Review your order before proceeding to payment.</p>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
             <div className="space-y-6">
                 <Card>
                     <CardHeader>
@@ -56,7 +62,7 @@ function Checkout() {
                 </Card>
                 <Card>
                     <CardHeader>
-                        <CardTitle className="flex items-center gap-2"><Ticket /> Order Summary</CardTitle>
+                        <CardTitle className="flex items-center gap-2 text-xl"><Ticket /> Order Summary</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4">
                         {selectedTickets.map(ticket => (
@@ -65,14 +71,14 @@ function Checkout() {
                                     <p className="font-semibold">{ticket.name} x{ticket.quantity}</p>
                                     <p className="text-sm text-muted-foreground">₹{ticket.price?.toFixed(2)} each</p>
                                 </div>
-                                <p className="font-semibold">₹{(ticket.price || 0) * ticket.quantity.toFixed(2)}</p>
+                                <p className="font-semibold">₹{((ticket.price || 0) * ticket.quantity).toFixed(2)}</p>
                             </div>
                         ))}
                     </CardContent>
                 </Card>
             </div>
             
-            <div className="md:sticky md:top-24 self-start">
+            <div className="lg:sticky lg:top-24 self-start">
                 <Card>
                     <CardHeader>
                         <CardTitle>Total</CardTitle>

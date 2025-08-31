@@ -12,8 +12,8 @@ const pendingEvents = [
 export default function AdminDashboardPage() {
   return (
     <div className="bg-muted/40 min-h-screen">
-      <div className="container mx-auto px-4 py-12">
-        <div className="flex justify-between items-start mb-8">
+      <div className="container mx-auto px-4 py-8 md:py-12">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
           <div>
             <h1 className="text-3xl font-bold">Admin Dashboard</h1>
             <p className="text-muted-foreground">Platform Governance & Compliance Center</p>
@@ -82,9 +82,9 @@ export default function AdminDashboardPage() {
                     <CardContent className="space-y-4">
                         {pendingEvents.length > 0 ? (
                             pendingEvents.map(event => (
-                                <div key={event.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors">
+                                <div key={event.id} className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors gap-4">
                                     <div className="flex items-center gap-4">
-                                         <div className="p-3 bg-primary/10 rounded-lg">
+                                         <div className="p-3 bg-primary/10 rounded-lg hidden sm:flex">
                                             <Ticket className="h-5 w-5 text-primary" />
                                          </div>
                                         <div>
@@ -92,7 +92,7 @@ export default function AdminDashboardPage() {
                                             <p className="text-sm text-muted-foreground">{event.organizer} • <span className="font-medium text-primary/80">{event.category}</span></p>
                                         </div>
                                     </div>
-                                    <div className="flex gap-2">
+                                    <div className="flex gap-2 self-end sm:self-auto">
                                         <Button variant="ghost" size="icon" className="text-green-500 hover:text-green-600 rounded-full"><CheckCircle className="h-5 w-5"/></Button>
                                         <Button variant="ghost" size="icon" className="text-destructive hover:text-destructive/80 rounded-full"><XCircle className="h-5 w-5"/></Button>
                                     </div>
