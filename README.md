@@ -1,4 +1,5 @@
-
+Team Name : Odoo Winners
+Team Number : 4
 Topic Name : EventHive
 
 EventHive is a modern event management platform designed to simplify how events are organized, managed, and experienced. It provides role-based dashboards that ensure smooth collaboration and efficiency for all stakeholders.
