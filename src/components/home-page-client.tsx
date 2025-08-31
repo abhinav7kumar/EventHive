@@ -83,15 +83,15 @@ export function HomePageClient({
           <p className="mt-4 max-w-2xl text-lg md:text-xl text-primary-foreground/90 drop-shadow-md">
             Discover, book, and enjoy unforgettable events.
           </p>
-          <div className="mt-8 w-full max-w-2xl bg-white/90 backdrop-blur-sm p-2 rounded-full shadow-lg flex items-center gap-2">
+          <form className="mt-8 w-full max-w-2xl bg-white/20 backdrop-blur-sm p-2 rounded-full shadow-lg flex items-center gap-2" onSubmit={(e) => e.preventDefault()}>
             <div className="relative w-full">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-background" />
               <Input
                 type="text"
                 placeholder="Search by event, location..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-12 pr-4 h-12 text-base border-none rounded-full bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0"
+                className="pl-12 pr-4 h-12 text-base text-white placeholder:text-white/80 border-none rounded-full bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0"
               />
             </div>
             <Button
@@ -101,7 +101,7 @@ export function HomePageClient({
             >
               Search
             </Button>
-          </div>
+          </form>
         </div>
       </section>
 
